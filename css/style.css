@@ -14,11 +14,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 body {
-    line-height: 1
+    line-height: 1;
+    background-color: #f5f5d5;
 }
 
 blockquote, q {
-    quotes: none
+    background: rgba(255, 255, 255, .6);
+    padding: 5px 10px 0 0;
+    quotes: none;
 }
 
 blockquote:before, blockquote:after, q:before, q:after {
@@ -173,7 +176,7 @@ h2 {
 nav.main-nav {
     padding: 20px 20px 0;
     background: #fff;
-    background: rgba(255, 255, 255, .90);
+    background: rgba(255, 255, 255, .0);
     margin: 0 auto;
     text-align: right;
     z-index: 100;
@@ -198,7 +201,7 @@ nav.main-nav a.cta {
   nav.main-nav {
       padding: 20px 10px 0 0;
       background: #fff;
-      background: rgba(255, 255, 255, .90);
+      background: rgba(255, 255, 255, .0);
       margin: 0 auto;
       text-align: right;
       z-index: 100;
@@ -899,7 +902,6 @@ a.symbol:hover {
 }
 #TableOfContents a code{
   font-family: Menlo, Monaco, Courier;
-  background-color: #fff;
   font-size: 11px;
   padding: 2px 3px;
   font-weight: 100;
