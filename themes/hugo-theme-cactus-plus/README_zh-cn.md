@@ -22,16 +22,16 @@ Cactus Plus 是在 [Cactus](https://github.com/digitalcraftsman/hugo-cactus-them
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Hugo Theme Cactus Plus](#hugo-theme-cactus-plus)
-	- [截图](#截图)
-	- [安装](#安装)
-	- [示例站点](#示例站点)
-	- [文章摘要](#文章摘要)
-	- [关于页面](#关于页面)
-	- [头像](#头像)
-	- [隐藏页面](#隐藏页面)
-	- [Disqus 评论](#disqus-评论)
-	- [社交链接](#社交链接)
-	- [部署主题](#部署主题)
+	- [截图](#%E6%88%AA%E5%9B%BE)
+	- [安装](#%E5%AE%89%E8%A3%85)
+	- [示例站点](#%E7%A4%BA%E4%BE%8B%E7%AB%99%E7%82%B9)
+	- [文章摘要](#%E6%96%87%E7%AB%A0%E6%91%98%E8%A6%81)
+	- [关于页面](#%E5%85%B3%E4%BA%8E%E9%A1%B5%E9%9D%A2)
+	- [头像](#%E5%A4%B4%E5%83%8F)
+	- [隐藏页面](#%E9%9A%90%E8%97%8F%E9%A1%B5%E9%9D%A2)
+	- [Disqus 评论](#disqus-%E8%AF%84%E8%AE%BA)
+	- [社交链接](#%E7%A4%BE%E4%BA%A4%E9%93%BE%E6%8E%A5)
+	- [部署主题](#%E9%83%A8%E7%BD%B2%E4%B8%BB%E9%A2%98)
 	- [License](#license)
 
 <!-- /TOC -->
@@ -90,7 +90,7 @@ Summary will show follow the post title title in home page.
 
 ## 头像
 
-你需要将 [images](https://github.com/nodejh/hugo-theme-cactus-plus/blob/master/static/images/) 目录下的 `avatar.png`、`avatar@2x.png`  和 `favicon.ico` 都替换为你自己的图像。
+你需要将 [images](https://github.com/nodejh/hugo-theme-cactus-plus/blob/master/static/images/) 目录下的 `avatar.jpg`、`avatar@2x.jpg`  和 `favicon.ico` 都替换为你自己的图像。
 
 
 ## 隐藏页面
