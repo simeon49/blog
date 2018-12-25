@@ -1,12 +1,12 @@
 # Site settings
-baseurl = "https://simeon49.github.io/blog"
+baseurl = "https://simeon49.github.io/blog/"
 languageCode = "zh-Hans-CN"
 title = "Simeon's blog"
 theme = "hugo-theme-cactus-plus"
 googleAnalytics = "your_google_analytics_id"
 # Set the value to true if your site include CJK (Chinese, Japanese, and Korean languages) characters
 hasCJKLanguage = true
-publishDir = "docs"
+publishDir = "public"
 
 [params]
 	author = "Simeon"
@@ -16,8 +16,8 @@ publishDir = "docs"
 	twitter = "your_twitter_id"
 	facebook = "your_facebook_id"
 
-	enableRSS = true
-	enableToc = true
+	# enableRSS = true
+	# enableToc = true
 
 	enableDisqus = true
 	disqusShortname = "your_disqus_short_name"
@@ -55,11 +55,11 @@ publishDir = "docs"
 	copyright = ""
 
 	# show latest posts in single page
-	showLatestPosts = false
+	showLatestPosts = true
 	readMore = ""
 
 	# Share
-	enableShare = true
+	enableShare = false
 	tweet = ""
 	share = ""
 
@@ -69,8 +69,8 @@ publishDir = "docs"
 
 	# Choose a font for the social icons in the footer. Either "mono-social" or "font-awesome"
 	iconFont = "font-awesome"
-  # The social icons can be styled differently if you use mono as font - circle, rounded, or empty
-  socialIconStyle = ""
+	# The social icons can be styled differently if you use mono as font - circle, rounded, or empty
+	socialIconStyle = ""
 
 
 # Add additional social link entries underneath
