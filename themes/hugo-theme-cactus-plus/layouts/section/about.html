@@ -7,7 +7,7 @@
     {{ .Content }}
 
     {{ if .Site.Params.enableComment }}
-        {{ if ,Site.Params.enableComment }}
+        {{ if .Site.Params.enableComment }}
             {{ partial "comment.html" . }}
         {{ end }}
     {{ end }}
