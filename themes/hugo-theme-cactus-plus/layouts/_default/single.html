@@ -39,8 +39,8 @@
                 {{ partial "share.html" . }}
             {{ end }}
 
-            {{ if .Site.Params.enableDisqus }}
-                {{ partial "disqus.html" . }}
+            {{ if .Site.Params.enableComment }}
+                {{ partial "comment.html" . }}
             {{ end }}
 
             {{ if .Site.Params.showLatestPosts }}

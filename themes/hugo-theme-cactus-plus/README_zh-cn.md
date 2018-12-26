@@ -106,9 +106,9 @@ Summary will show follow the post title title in home page.
 
 本主题提供两种评论系统，Disqus 和多说。使用 Disqus 评论需要在 [`config.toml`](https://github.com/nodejh/hugo-theme-cactus-plus/blob/master/exampleSite/config.toml) 中进行设置。
 
-设置 `disqusShortname` 为你的 Disqus ID，并将 `enableDisqus` 设置为 `true` 即可开启 Disqus 评论。
+设置 `disqusShortname` 为你的 Disqus ID，并将 `enableComment` 设置为 `true` 即可开启 Disqus 评论。
 
-将 `enableDisqus` 设置为 `false` 则不启用 Disqus 评论。
+将 `enableComment` 设置为 `false` 则不启用 Disqus 评论。
 
 
 ## 社交链接

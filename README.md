@@ -2,6 +2,15 @@
 
 ## simeon's personal blog
 
+## 本地开发测试
+```bash
+# install hugo(base on go)
+brew install hugo
+
+# run
+hugo serve
+```
+
 ## 部署
 ```bash
 # 添加 upstream 远程节点

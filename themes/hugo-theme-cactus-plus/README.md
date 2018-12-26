@@ -90,7 +90,7 @@ Pages can be hidden and don't appear in the post list on the homepage if you add
 
 ## Disqus
 
-This theme features a comment system powered by Disqus. Just add your Disqus-shortname to the [`config.toml`](https://github.com/nodejh/hugo-theme-cactus-plus/blob/master/exampleSite/config.toml) and set `enableDisqus = true`, then let readers respond to your blog posts.
+This theme features a comment system powered by Disqus. Just add your Disqus-shortname to the [`config.toml`](https://github.com/nodejh/hugo-theme-cactus-plus/blob/master/exampleSite/config.toml) and set `enableComment = true`, then let readers respond to your blog posts.
 
 
 ## Social link icons
