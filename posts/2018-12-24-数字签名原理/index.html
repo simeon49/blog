@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		 
+			
+  
+    <meta name="twitter:card" content="summary"/>
+    
+      <meta name="twitter:image" content="https://simeon49.github.io/blog/images/avatar.jpg" />
+    
+  
+  
+  <meta name="twitter:title" content="数字签名原理"/>
+  <meta name="twitter:description" content="数字签名原理"/>
+  
+    <meta name="twitter:site" content="@your_twitter_id"/>
+  
+  
+  
+  
+    <meta name="twitter:creator" content="@Simeon"/>
+  
+
+
+
+		
+		<meta name="author" content="Simeon">
+		<meta name="description" content="Simeon 个人微博">
+		<meta name="generator" content="Hugo 0.52" />
+		<title>数字签名原理 &middot; Simeon&#39;s blog</title>
+		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/font-awesome.min.css">
+		
+
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://simeon49.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://simeon49.github.io/blog/posts'>Archive</a>
+	<a href='https://simeon49.github.io/blog/tags'>Tags</a>
+	<a href='https://simeon49.github.io/blog/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        数字签名原理
+                    </h1>
+                    <h2 class="headline">
+                    Dec 24, 2018 00:00
+                    · 12744 words
+                    · 26 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D">数字签名</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/pki">PKI</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/x.509">x.509</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>最近在学习区块链-fabric,其中用到了PKI公钥密码体制, 在网上看了很多资料,其中有一篇文章写的非常的好,故转载后加以内容的修改<code>(删减window部分, 补充unix部分和一些我觉得挺有用的东西)</code></p>
+
+<p>如果你需要了解window下证书的生成过程请参考<a href="http://www.cnblogs.com/JeffreySun/archive/2010/06/24/1627247.html">原文</a></p>
+
+<hr />
+
+<h2 id="1-基础知识">1、基础知识</h2>
+
+<h3 id="1-1-公钥密码体制-public-key-cryptography">1.1、公钥密码体制(public-key cryptography)</h3>
+
+<p>公钥密码体制分为三个部分，公钥、私钥、加密解密算法，它的加密解密过程如下：</p>
+
+<ul>
+<li><code>加密</code>：通过加密算法和公钥对内容(或者说明文)进行加密，得到密文。加密过程需要用到公钥。</li>
+<li><code>解密</code>：通过解密算法和私钥对密文进行解密，得到明文。解密过程需要用到解密算法和私钥。注意，由公钥加密的内容，只能由私钥进行解密，也就是说，由公钥加密的内容，如果不知道私钥，是无法解密的。</li>
+</ul>
+
+<blockquote>
+<p><em>公钥密码体制的公钥和算法都是公开的(这是为什么叫公钥密码体制的原因)，私钥是保密的。大家都以使用公钥进行加密，但是只有私钥的持有者才能解密。在实际的使用中，有需要的人会生成一对公钥和私钥，把公钥发布出去给别人使用，自己保留私钥。</em></p>
+</blockquote>
+
+<h3 id="1-2-对称加密算法-symmetric-key-algorithms">1.2、对称加密算法(symmetric key algorithms)</h3>
+
+<p>在对称加密算法中，加密使用的密钥和解密使用的密钥是相同的。也就是说，加密和解密都是使用的同一个密钥。因此对称加密算法要保证安全性的话，密钥要做好保密，只能让使用的人知道，不能对外公开。这个和上面的公钥密码体制有所不同，公钥密码体制中加密是用公钥，解密使用私钥，而对称加密算法中，加密和解密都是使用同一个密钥，不区分公钥和私钥。</p>
+
+<ul>
+<li><code>密钥</code>: 一般就是一个字符串或数字，在加密或者解密时传递给加密/解密算法。前面在公钥密码体制中说到的公钥、私钥就是密钥，公钥是加密使用的密钥，私钥是解密使用的密钥。</li>
+</ul>
+
+<h3 id="1-3-非对称加密算法-asymmetric-key-algorithms">1.3、非对称加密算法(asymmetric key algorithms)</h3>
+
+<p>在非对称加密算法中，加密使用的密钥和解密使用的密钥是不相同的。前面所说的公钥密码体制就是一种非对称加密算法，他的公钥和是私钥是不能相同的，也就是说加密使用的密钥和解密使用的密钥不同，因此它是一个非对称加密算法。</p>
+
+<h3 id="1-4-rsa简介">1.4、RSA简介</h3>
+
+<p>RSA密码体制是一种公钥密码体制，公钥公开，私钥保密，它的加密解密算法是公开的。 由公钥加密的内容可以并且只能由私钥进行解密，并且由私钥加密的内容可以并且只能由公钥进行解密。也就是说，RSA的这一对公钥、私钥都可以用来加密和解密，并且一方加密的内容可以由并且只能由对方进行解密。</p>
+
+<h3 id="1-5-签名和加密">1.5、签名和加密</h3>
+
+<p>我们说加密，是指对某个内容加密，加密后的内容还可以通过解密进行还原。 比如我们把一封邮件进行加密，加密后的内容在网络上进行传输，接收者在收到后，通过解密可以还原邮件的真实内容。</p>
+
+<blockquote>
+<p>这里主要解释一下签名，签名就是在信息的后面再加上一段内容，可以证明信息没有被修改过，怎么样可以达到这个效果呢？一般是对信息做一个hash计算得到一个hash值，注意，这个过程是不可逆的，也就是说无法通过hash值得出原来的信息内容。在把信息发送出去时，把这个hash值加密后做为一个签名和信息一起发出去。 接收方在收到信息后，会重新计算信息的hash值，并和信息所附带的hash值(解密后)进行对比，如果一致，就说明信息的内容没有被修改过，因为这里hash计算可以保证不同的内容一定会得到不同的hash值，所以只要内容一被修改，根据信息内容计算的hash值就会变化。当然，不怀好意的人也可以修改信息内容的同时也修改hash值，从而让它们可以相匹配，为了防止这种情况，hash值一般都会加密后(也就是签名)再和信息一起发送，以保证这个hash值不被修改。至于如何让别人可以解密这个签名，这个过程涉及到数字证书等概念，我们后面在说到数字证书时再详细说明，这里您先只需先理解签名的这个概念。</p>
+</blockquote>
+
+<h2 id="2-一个加密通信过程的演化">2、一个加密通信过程的演化</h2>
+
+<p>我们来看一个例子，现在假设&rdquo;<span style="color:#7c79e5">服务器</span>”和“<span style="color:#86ca5e">客户</span>”要在网络上通信，并且他们打算使用RSA(参看前面的RSA简介)来对通信进行加密以保证谈话内容的安全。由于是使用RSA这种公钥密码体制，“服务器”需要对外发布公钥(算法不需要公布，RSA的算法大家都知道)，自己留着私钥。“<span style="color:#86ca5e">客户</span>”通过某些途径拿到了“<span style="color:#7c79e5">服务器</span>”发布的公钥，客户并不知道私钥。“客户”具体是通过什么途径获取公钥的，我们后面再来说明，下面看一下双方如何进行保密的通信：</p>
+
+<h3 id="2-1-第一回合">2.1 第一回合：</h3>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：你好</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：？？？？</span></p>
+
+<blockquote>
+<p>因为消息是在网络上传输的，有人可以冒充自己是“服务器”来向客户发送信息。例如上面的消息可以被黑客截获如下：</p>
+</blockquote>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：你好</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“黑客”：你好</span>        <strong>//黑客在“客户”和“服务器”之间的某个路由器上截获“客户”发给服务器的信息，然后自己冒充“服务器”</strong></p>
+
+<p><span style="color:#7c79e5">“黑客”-&gt;“客户”：你好，我是服务器</span></p>
+
+<blockquote>
+<p>因此“客户”在接到消息后，并不能肯定这个消息就是由“服务器”发出的，某些“黑客”也可以冒充“服务器”发出这个消息。如何确定信息是由“服务器”发过来的呢？有一个解决方法，因为只有服务器有私钥，所以如果只要能够确认对方有私钥，那么对方就是“服务器”。因此通信过程可以改进为如下：</p>
+</blockquote>
+
+<h3 id="2-2-第二回合">2.2 第二回合：</h3>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：你好</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：向我证明你就是服务器</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器 {你好，我是服务器}[私钥|RSA]</span>   <strong>//注意这里约定一下，{} 表示RSA加密后的内容，[ | ]表示用什么密钥和算法进行加密，后面的示例中都用这种表示方式，例如上面的 {你好，我是服务器}[私钥|RSA]  就表示用私钥对“你好，我是服务器”进行加密后的结果。</strong></p>
+
+<blockquote>
+<p>为了向“客户”证明自己是“服务器”， “服务器”把一个字符串用自己的私钥加密，把明文和加密后的密文一起发给“客户”。对于这里的例子来说，就是把字符串 “你好，我是服务器”和这个字符串用私钥加密后的内容发给客户。</p>
+
+<p>“客户”收到信息后，她用自己持有的公钥解密密文，和明文进行对比，如果一致，说明信息的确是由服务器发过来的。也就是说“客户”把 {你好，我是服务器} 这个内容用公钥进行解密，然后和“你好，我是服务器”对比。因为由“服务器”用私钥加密后的内容，由并且只能由公钥进行解密，私钥只有“服务器”持有，所以如果解密出来的内容是能够对得上的，那说明信息一定是从“服务器”发过来的。</p>
+</blockquote>
+
+<p>假设“黑客”想冒充“服务器”：</p>
+
+<p><span style="color:#7c79e5">“黑客”-&gt;“客户”：你好，我是服务器</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“黑客”：向我证明你就是服务器</span></p>
+
+<p><span style="color:#7c79e5">“黑客”-&gt;“客户”：你好，我是服务器 {你好，我是服务器}[？？？|RSA]</span>    <strong>//这里黑客无法冒充，因为他不知道私钥，无法用私钥加密某个字符串后发送给客户去验证。</strong></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“黑客”：？？？？</span></p>
+
+<blockquote>
+<p>由于“黑客”没有“服务器”的私钥，因此它发送过去的内容，“客户”是无法通过服务器的公钥解密的，因此可以认定对方是个冒牌货！</p>
+
+<p>到这里为止，“客户”就可以确认“服务器”的身份了，可以放心和“服务器”进行通信，但是这里有一个问题，通信的内容在网络上还是无法保密。为什么无法保密呢？通信过程不是可以用公钥、私钥加密吗？其实用RSA的私钥和公钥是不行的，我们来具体分析下过程，看下面的演示：</p>
+</blockquote>
+
+<h3 id="2-3-第三回合">2.3 第三回合：</h3>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：你好</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：向我证明你就是服务器</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器 {你好，我是服务器}[私钥|RSA]</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：{我的帐号是aaa，密码是123，把我的余额的信息发给我看看}[公钥|RSA]</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：{你的余额是100元}[私钥|RSA]</span></p>
+
+<blockquote>
+<p>注意上面的的信息 {你的余额是100元}[私钥]，这个是“服务器”用私钥加密后的内容，但是我们之前说了，公钥是发布出去的，因此所有的人都知道公钥，所以除了“客户”，其它的人也可以用公钥对{你的余额是100元}[私钥]进行解密。所以如果“服务器”用私钥加密发给“客户”，这个信息是无法保密的，因为只要有公钥就可以解密这内容。然而“服务器”也不能用公钥对发送的内容进行加密，因为“客户”没有私钥，发送个“客户”也解密不了。</p>
+</blockquote>
+
+<p>这样问题就又来了，那又如何解决呢？在实际的应用过程，一般是通过引入对称加密来解决这个问题，看下面的演示：</p>
+
+<p>2.4 第四回合：
+<span style="color:#86ca5e">“客户”-&gt;“服务器”：你好</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：向我证明你就是服务器</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器 {你好，我是服务器}[私钥|RSA]</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：{我们后面的通信过程，用对称加密来进行，这里是对称加密算法和密钥}[公钥|RSA]</span>    <strong>//蓝色字体的部分是对称加密的算法和密钥的具体内容，客户把它们发送给服务器。</strong></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：{OK，收到！}[密钥|对称加密算法]</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：{我的帐号是aaa，密码是123，把我的余额的信息发给我看看}[密钥|对称加密算法]</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：{你的余额是100元}[密钥|对称加密算法]</span></p>
+
+<blockquote>
+<p>在上面的通信过程中，“客户”在确认了“服务器”的身份后，“客户”自己选择一个对称加密算法和一个密钥，把这个对称加密算法和密钥一起用公钥加密后发送给“服务器”。注意，由于对称加密算法和密钥是用公钥加密的，就算这个加密后的内容被“黑客”截获了，由于没有私钥，“黑客”也无从知道对称加密算法和密钥的内容。</p>
+
+<p>由于是用公钥加密的，只有私钥能够解密，这样就可以保证只有服务器可以知道对称加密算法和密钥，而其它人不可能知道(这个对称加密算法和密钥是“客户”自己选择的，所以“客户”自己当然知道如何解密加密)。这样“服务器”和“客户”就可以用对称加密算法和密钥来加密通信的内容了。</p>
+</blockquote>
+
+<p><strong>总结一下，RSA加密算法在这个通信过程中所起到的作用主要有两个：</strong></p>
+
+<p>因为私钥只有“服务器”拥有，因此“客户”可以通过判断对方是否有私钥来判断对方是否是“服务器”。
+客户端通过RSA的掩护，安全的和服务器商量好一个对称加密算法和密钥来保证后面通信过程内容的安全。
+如果这里您理解了为什么不用RSA去加密通信过程，而是要再确定一个对称加密算法来保证通信过程的安全，那么就说明前面的内容您已经理解了。(如果不清楚，再看下2.3和2.4，如果还是不清楚，那应该是我们说清楚，您可以留言提问。)</p>
+
+<p>到这里，“客户”就可以确认“服务器”的身份，并且双方的通信内容可以进行加密，其他人就算截获了通信内容，也无法解密。的确，好像通信的过程是比较安全了。</p>
+
+<p>但是这里还留有一个问题，在最开始我们就说过，“服务器”要对外发布公钥，那“服务器”如何把公钥发送给“客户”呢？我们第一反应可能会想到以下的两个方法：</p>
+
+<p>把公钥放到互联网的某个地方的一个下载地址，事先给“客户”去下载。
+每次和“客户”开始通信时，“服务器”把公钥发给“客户”。
+但是这个两个方法都有一定的问题:</p>
+
+<ul>
+<li><p><code>1方法</code>，“客户”无法确定这个下载地址是不是“服务器”发布的，你凭什么就相信这个地址下载的东西就是“服务器”发布的而不是别人伪造的呢，万一下载到一个假的怎么办？另外要所有的“客户”都在通信前事先去下载公钥也很不现实。</p></li>
+
+<li><p><code>2方法</code>，也有问题，因为任何人都可以自己生成一对公钥和私钥，他只要向“客户”发送他自己的私钥就可以冒充“服务器”了。示意如下：</p></li>
+</ul>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“黑客”：你好</span>           <strong>//黑客截获“客户”发给“服务器”的消息</strong></p>
+
+<p><span style="color:#7c79e5">“黑客”-&gt;“客户”：你好，我是服务器，这个是我的公钥</span>    <strong>//黑客自己生成一对公钥和私钥，把公钥发给“客户”，自己保留私钥</strong></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“黑客”：向我证明你就是服务器</span></p>
+
+<p><span style="color:#7c79e5">“黑客”-&gt;“客户”：你好，我是服务器 {你好，我是服务器}[黑客自己的私钥|RSA] </span>     <strong>//客户收到“黑客”用私钥加密的信息后，是可以用“黑客”发给自己的公钥解密的，从而会误认为“黑客”是“服务器”</strong></p>
+
+<p>因此“黑客”只需要自己生成一对公钥和私钥，然后把公钥发送给“客户”，自己保留私钥，这样由于“客户”可以用黑客的公钥解密黑客的私钥加密的内容，“客户”就会相信“黑客”是“服务器”，从而导致了安全问题。这里问题的根源就在于，大家都可以生成公钥、私钥对，无法确认公钥对到底是谁的。 如果能够确定公钥到底是谁的，就不会有这个问题了。例如，如果收到“黑客”冒充“服务器”发过来的公钥，经过某种检查，如果能够发现这个公钥不是“服务器”的就好了。</p>
+
+<p><strong>为了解决这个问题，数字证书出现了，它可以解决我们上面的问题。先大概看下什么是数字证书，一个证书包含下面的具体内容：</strong></p>
+
+<ul>
+<li>证书的发布机构</li>
+<li>证书的有效期</li>
+<li>公钥</li>
+<li>证书所有者（Subject）</li>
+<li>签名所使用的算法</li>
+<li>指纹以及指纹算法</li>
+<li>证书的内容的详细解释会在后面详细解释，这里先只需要搞清楚一点，数字证书可以保证数字证书里的公钥确实是这个证书的所有者(Subject)的，或者证书可以用来确认对方的身份。也就是说，我们拿到一个数字证书，我们可以判断出这个数字证书到底是谁的。至于是如何判断的，后面会在详细讨论数字证书时详细解释。现在把前面的通信过程使用数字证书修改为如下：</li>
+</ul>
+
+<h3 id="2-5-第五回合">2.5 第五回合：</h3>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：你好</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器，这里是我的数字证书        //这里用证书代替了公钥</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：向我证明你就是服务器</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器 {你好，我是服务器}[私钥|RSA]</span></p>
+
+<blockquote>
+<p>注意，上面第二次通信，“服务器”把自己的证书发给了“客户”，而不是发送公钥。“客户”可以根据证书校验这个证书到底是不是“服务器”的，也就是能校验这个证书的所有者是不是“服务器”，从而确认这个证书中的公钥的确是“服务器”的。后面的过程和以前是一样，“客户”让“服务器”证明自己的身份，“服务器”用私钥加密一段内容连同明文一起发给“客户”，“客户”把加密内容用数字证书中的公钥解密后和明文对比，如果一致，那么对方就确实是“服务器”，然后双方协商一个对称加密来保证通信过程的安全。到这里，整个过程就完整了，我们回顾一下：</p>
+</blockquote>
+
+<h3 id="2-6-完整过程">2.6 完整过程：</h3>
+
+<p><code>step1： “客户”向服务端发送一个通信请求</code></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：你好</span></p>
+
+<p><code>step2： “服务器”向客户发送自己的数字证书。证书中有一个公钥用来加密信息，私钥由“服务器”持有</code></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：你好，我是服务器，这里是我的数字证书 </span></p>
+
+<p><code>step3： “客户”收到“服务器”的证书后，它会去验证这个数字证书到底是不是“服务器”的，数字证书有没有什么问题，数字证书如果检查没有问题，就说明数字证书中的公钥确实是“服务器”的。检查数字证书后，“客户”会发送一个随机的字符串给“服务器”用私钥去加密，服务器把加密的结果返回给“客户”，“客户”用公钥解密这个返回结果，如果解密结果与之前生成的随机字符串一致，那说明对方确实是私钥的持有者，或者说对方确实是“服务器”。</code></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：向我证明你就是服务器，这是一个随机字符串     //前面的例子中为了方便解释，用的是</span>“你好”等内容，实际情况下一般是随机生成的一个字符串。</p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：{一个随机字符串}[私钥|RSA]</span></p>
+
+<p><code>step4： 验证“服务器”的身份后，“客户”生成一个对称加密算法和密钥，用于后面的通信的加密和解密。这个对称加密算法和密钥，“客户”会用公钥加密后发送给“服务器”，别人截获了也没用，因为只有“服务器”手中有可以解密的私钥。这样，后面“服务器”和“客户”就都可以用对称加密算法来加密和解密通信内容了。</code></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：{OK，已经收到你发来的对称加密算法和密钥！有什么可以帮到你的？}[密钥|对称加密算法]</span></p>
+
+<p><span style="color:#86ca5e">“客户”-&gt;“服务器”：{我的帐号是aaa，密码是123，把我的余额的信息发给我看看}[密钥|对称加密算法]</span></p>
+
+<p><span style="color:#7c79e5">“服务器”-&gt;“客户”：{你好，你的余额是100元}[密钥|对称加密算法]</span></p>
+
+<p><code>…… //继续其它的通信</code></p>
+
+<h3 id="2-7-其它问题">2.7 其它问题：</h3>
+
+<p>上面的过程已经十分接近HTTPS的真实通信过程了，完全可以按照这个过程去理解HTTPS的工作原理。但是我为了方便解释，上面有些细节没有说到，有兴趣的人可以看下这部分的内容。可以跳过不看，无关紧要。</p>
+
+<p><code>【问题1】</code></p>
+
+<blockquote>
+<p>上面的通信过程中说到，在检查完证书后，“客户”发送一个随机的字符串给“服务器”去用私钥加密，以便判断对方是否真的持有私钥。但是有一个问题，“黑客”也可以发送一个字符串给“服务器”去加密并且得到加密后的内容，这样对于“服务器”来说是不安全的，因为黑客可以发送一些简单的有规律的字符串给“服务器”加密，从而寻找加密的规律，有可能威胁到私钥的安全。所以说，“服务器”随随便便用私钥去加密一个来路不明的字符串并把结果发送给对方是不安全的。
+&gt;<strong>〖解决方法〗</strong>
+&gt;每次收到“客户”发来的要加密的的字符串时，“服务器”并不是真正的加密这个字符串本身，而是把这个字符串进行一个hash计算，加密这个字符串的hash值(不加密原来的字符串)后发送给“客户”，“客户”收到后解密这个hash值并自己计算字符串的hash值然后进行对比是否一致。也就是说，“服务器”不直接加密收到的字符串，而是加密这个字符串的一个hash值，这样就避免了加密那些有规律的字符串，从而降低被破解的机率。“客户”自己发送的字符串，因此它自己可以计算字符串的hash值，然后再把“服务器”发送过来的加密的hash值和自己计算的进行对比，同样也能确定对方是否是“服务器”。</p>
+</blockquote>
+
+<p><code>【问题2】</code></p>
+
+<blockquote>
+<p>在双方的通信过程中，“黑客”可以截获发送的加密了的内容，虽然他无法解密这个内容，但是他可以捣乱，例如把信息原封不动的发送多次，扰乱通信过程。
+&gt;<strong>〖解决方法〗</strong>
+&gt; 可以给通信的内容加上一个序号或者一个随机的值，如果“客户”或者“服务器”接收到的信息中有之前出现过的序号或者随机值，那么说明有人在通信过程中重发信息内容进行捣乱，双方会立刻停止通信。有人可能会问，如果有人一直这么捣乱怎么办？那不是无法通信了？ 答案是的确是这样的，例如有人控制了你连接互联网的路由器，他的确可以针对你。但是一些重要的应用，例如军队或者政府的内部网络，它们都不使用我们平时使用的公网，因此一般人不会破坏到他们的通信。 </p>
+</blockquote>
+
+<p><code>【问题3】</code>
+&gt; 在双方的通信过程中，“黑客”除了简单的重复发送截获的消息之外，还可以修改截获后的密文修改后再发送，因为修改的是密文，虽然不能完全控制消息解密后的内容，但是仍然会破坏解密后的密文。因此发送过程如果黑客对密文进行了修改，“客户”和“服务器”是无法判断密文是否被修改的。虽然不一定能达到目的，但是“黑客”可以一直这样碰碰运气。
+&gt;&gt;<strong>〖解决方法〗</strong>
+&gt;&gt; 在每次发送信息时，先对信息的内容进行一个hash计算得出一个hash值，将信息的内容和这个hash值一起加密后发送。接收方在收到后进行解密得到明文的内容和hash值，然后接收方再自己对收到信息内容做一次hash计算，与收到的hash值进行对比看是否匹配，如果匹配就说明信息在传输过程中没有被修改过。如果不匹配说明中途有人故意对加密数据进行了修改，立刻中断通话过程后做其它处理。</p>
+
+<h2 id="3-证书的构成和原理">3. 证书的构成和原理</h2>
+
+<h3 id="3-1-证书的构成和原理">3.1 证书的构成和原理</h3>
+
+<p>windows 证书相关请阅读<a href="http://www.cnblogs.com/JeffreySun/archive/2010/06/24/1627247.html">原文</a></p>
+
+<h5 id="补充内容-证书的结构">[补充内容] 证书的结构</h5>
+
+<pre><code class="language-yaml">openssl x509 -in ./Certificates.pen -text
+Certificate:
+    Data:
+        # ------------------------- Issuer(证书发布机构) -------------------------
+        Version: 3 (0x2)    # 版本信息
+        Serial Number:      # 序列号, 每个证书都有唯一的证书序列号
+            8888792379067236386 (0x7b5b5592ec808022)
+        Signature Algorithm:    # 签名算法 进行证书签名的算法)
+            sha256WithRSAEncryption
+        Issuer:             # 证书发布机构信息，命名规则一般采用X.500格式
+            # C:国家(Contry) O:组织(Organization) OU:组织单位(Organizational Unit) CN:通用名称(Common Name)
+            C=US, O=Apple Inc., OU=Apple Worldwide Developer Relations, CN=Apple Worldwide Developer Relations Certification Authority
+        Validity:           # 有效期，现在通用的证书一般采用UTC时间格式，它的计时范围为1950-2049
+            Not Before: Jul 18 10:14:31 2018 GMT
+            Not After : Jul 18 10:14:31 2019 GMT
+
+        # ------------------------- Subject(证书拥有者) -------------------------
+        Subject:            # 拥有者信息，命名规则一般采用X.500格式
+            # UID:UserID CN:(Common Name) OU:组织单位(Organizational Unit) C:国家(Contry) O:组织(Organization)
+            UID=F5TY3Y2GH2, CN=iPhone Distribution=Zhonglian Yong'an Intelligence Sci-tech (Chengdu) Co., Ltd. (F5TY3Y2GH2), OU=F5TY3Y2GH2, O=Zhonglian Yong'an Intelligence Sci-tech (Chengdu) Co., Ltd., C=CN
+
+        # ------------------------- PublisKey(公钥信息) -------------------------
+        Subject Public Key Info:    # 所有人的公开密钥
+            Public Key Algorithm: rsaEncryption # 算法
+                Public-Key: (2048 bit)  # 公钥长度 256字节
+                Modulus:
+                    00:d1:d7:b9:06:af:01:9f:ea:01:01:8d:b6:a0:0a:
+                    28:d0:d7:58:3c:1f:0c:b5:91:44:71:58:ef:fd:c5:
+                    54:2e:e7:be:06:7b:c2:cb:12:a5:cf:8b:88:94:02:
+                    7d:5b:cc:ea:45:67:10:b5:30:13:42:52:99:a5:69:
+                    66:de:6b:a5:99:df:a6:88:63:a8:16:20:ef:34:3e:
+                    9a:15:25:b0:21:5d:73:82:68:3e:53:dd:c5:59:4c:
+                    14:57:cc:52:6c:0d:7b:1d:1f:60:f8:54:03:c1:e6:
+                    c9:d6:da:06:1b:73:43:8c:08:ff:a1:9e:98:8f:41:
+                    cb:d8:5a:d6:cc:50:77:8a:5e:c8:fe:cd:04:2b:82:
+                    c5:e8:b3:3a:81:e6:7d:b5:43:62:46:ff:84:cd:82:
+                    6a:60:f8:d8:0c:9f:50:ac:00:d4:99:5f:3f:a7:33:
+                    20:4e:7b:9d:b8:84:3f:24:29:a5:e4:b0:0a:d1:ee:
+                    94:6a:e9:70:13:4e:89:ad:27:7d:18:e4:0c:f5:ab:
+                    8d:28:88:dc:fe:1b:e4:fa:dc:4a:29:2d:d1:e2:1b:
+                    38:ef:7c:ca:c6:72:53:d0:1d:ef:54:58:81:5e:1e:
+                    93:70:93:66:af:8d:a0:1f:21:81:37:b4:1b:fe:62:
+                    34:49:47:29:e2:53:dc:4d:e9:eb:cf:6e:23:b7:16:
+                    ad:29
+                Exponent: 65537 (0x10001)
+
+        # ------------------------- 其它 -------------------------
+        X509v3 extensions:
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Authority Key Identifier:
+                keyid:88:27:17:09:A9:B6:18:60:8B:EC:EB:BA:F6:47:59:C5:52:54:A3:B7
+
+            Authority Information Access:
+                OCSP - URI:http://ocsp.apple.com/ocsp03-wwdr11
+
+            X509v3 Certificate Policies:
+                Policy: 1.2.840.113635.100.5.1
+                    User Notice:
+                    Explicit Text: Reliance on this certificate by any party assumes acceptance of the then applicable standard terms and conditions of use, certificate policy and certification practice statements.
+                    CPS: http://www.apple.com/certificateauthority/
+
+            X509v3 Extended Key Usage: critical
+                Code Signing
+            X509v3 Subject Key Identifier:
+                B8:B7:35:01:BE:3F:8A:2F:42:FE:47:D6:7D:13:C2:B0:12:4F:11:09
+            X509v3 Key Usage: critical
+                Digital Signature
+            1.2.840.113635.100.6.1.4: critical
+                ..
+
+    # --------- 签名(Data部分内容hash后, 由证书颁发机构使用私钥进行加密) -------------
+    Signature Algorithm: sha256WithRSAEncryption
+            89:e2:54:e7:e8:77:4a:5b:e3:5f:27:e7:12:6a:6b:09:9f:9e:
+            75:d9:92:6f:31:48:63:8c:be:09:e4:82:81:5b:71:e8:22:61:
+            28:03:a8:cd:11:d6:dc:d4:2e:02:d5:82:e0:84:42:34:5f:55:
+            c1:a0:ef:63:8b:4e:75:da:f1:c5:49:5a:d8:a1:4d:b2:be:25:
+            ba:35:14:19:b4:b3:7c:63:0d:a5:5c:f2:e5:62:d6:9a:90:33:
+            fb:a2:ed:9c:a9:36:33:5a:eb:f7:36:6c:ed:a7:6a:1f:d5:20:
+            e6:68:7a:cf:40:fa:63:85:92:02:e7:aa:34:6f:b5:6b:81:98:
+            e9:83:15:ef:52:34:ef:eb:9d:56:13:a8:9f:f1:a3:de:0d:80:
+            37:5b:f1:0b:70:eb:fc:4b:52:05:d0:38:0c:0b:bc:04:8b:6d:
+            1f:71:eb:e8:7f:57:d6:56:ac:75:1f:06:da:82:fb:6a:32:d5:
+            78:59:d7:b8:f1:31:00:a0:38:f2:48:40:cd:64:a2:52:2c:be:
+            82:b2:c1:4b:a0:48:3b:57:c8:1e:5d:76:08:5d:3b:42:76:a0:
+            4f:de:d2:fe:d1:99:e7:d5:3c:28:2f:aa:c9:21:49:58:fb:29:
+            51:82:b6:82:89:e5:cd:e1:1f:47:08:27:63:d9:05:34:72:ba:
+            66:f4:ca:9a
+</code></pre>
+
+<blockquote>
+<p>[补充内容] 证书的实体是一个文件,这个文件内容可以是二进制的(名称类似: xxxxx.cer), 或者是linux下比较常用的字符串形式的(名称类似: xxxxx.pem) 当然还有其他的变种文件类型, 但无论是哪种类型的证书实体都会遵行一种国际标准,其中最为广泛使用的标准是X.509. </p>
+</blockquote>
+
+<h5 id="补充内容-证书格式的转换">[补充内容]  证书格式的转换</h5>
+
+<pre><code class="language-bash"># [.crt .cer .der] =&gt; pem
+openssl x509 -inform der -in Certificates.cer -out Certificates.pem
+
+# pem =&gt; [.crt .cer .der]
+openssl x509 -outform der -in Certificates.pem -out Certificates.cer
+
+# [.pfx .p12] =&gt; pem    注意: p12, pfx 除了包含证书外 还包含私钥
+# -nocerts: 只输出私钥  -nokeys: 只输出证书
+openssl pkcs12 -in keyStore.pfx -out keyStore.pem -nodes
+
+# 私钥 + [.crt .cer .der] =&gt; [.pfx .p12]
+openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt -certfile CACert.crt
+[补充内容]  openssl的一些其它用法
+
+# 1. 首先生私钥匙(其实公钥也包含于在这个文件中)
+openssl genrsa -out private.pem 1024
+# 生成的文件内容类似下面的样子:
+#
+# -----BEGIN RSA PRIVATE KEY-----
+# MIICXQIBAAKBgQDBCIJVh/CsJbCp44tNFmNd3CodYduQEOBwzZCOcBZmbKrjiUCF
+# AWs+YW1VNHXpJaotw9FgjDPGd2xEB6IeErSlBGzGydREfLQHmImwbkRYijwOMoWv
+# BbziMiG+TY9U4YgsO+vVO27HGWS5vmj9Ig/b6y76mg1f6/66TDkFSECAawIDAQAB
+# AoGALl0Z2OtOzjo7RYLmyXwwH7Iq12XSs7aqAc4OA3g+mRlOrlogChI+LPx/ozB3
+# halLR7S5zIPAR9IVSf2/XZPGmVU2Y7LXkJwrWwx+fUUMDUld+5vGhfwLyefAB5k4
+# wyWf4JsZZfyra19jjemoCUriFpjO0zH7+jOVK1bY1lI4xfECQQDjs5WxxRr50mQT
+# IpJwO5eNHJIRWgvP3K7YEtZFw9jv/s9QjjQtP6uW8mWZ2TbLZSJfMoUkM/ZcFa4b
+# 4a4c2CXZAkEA2QXwhmrdA2DD3wVYpSqf84X1yF7zuHk0xjGXGbHhOYzGRe+O1uYJ
+# M0MQD7aDwhAzIfWH10eXyhxLXxAKJVLZ4wJBAJY7nsCzs6Cw16ZoYQX7y3onJ5ib
+# OL/kctfNVeKh3Tg7fr0/ld1k7Omi9LYVQrnf+FWnF4FTZ3BKPZ3XwPD3C8ECQFSV
+# qwxIxEFXyp+2zrj5JwRcFtJ0p5sjqn0AwPqjyLuMcY66crqxR66yGaV2Jl5RwAwh
+# TUOLxM5iPsIbV0j6xK8CQQCboBoV9HtLyiaFnlZMHbRVVYa6Fv72o4Tu3EUbQJXL
+# KGLLj2DxJlUjL+aowq//KHWNecWcuZlJyFTl367P2ppm
+# -----END RSA PRIVATE KEY-----
+#
+
+# 2.提取公钥
+openssl rsa -in private.pem -out public.pem -outform PEM -pubout
+# 生成的公钥文件内容类似下面的样子:
+#
+# -----BEGIN PUBLIC KEY-----
+# MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDBCIJVh/CsJbCp44tNFmNd3Cod
+# YduQEOBwzZCOcBZmbKrjiUCFAWs+YW1VNHXpJaotw9FgjDPGd2xEB6IeErSlBGzG
+# ydREfLQHmImwbkRYijwOMoWvBbziMiG+TY9U4YgsO+vVO27HGWS5vmj9Ig/b6y76
+# mg1f6/66TDkFSECAawIDAQAB
+# -----END PUBLIC KEY-----
+#
+
+# 3.使用公钥加密 私钥解密
+# 3.1 制作一个待加密文件
+echo 'too many secrets' &gt; file.txt
+# 3.2 使用公钥加密 结果在(file.ssl)
+openssl rsautl -encrypt -inkey public.pem -pubin -in file.txt -out file.ssl
+# 3.3 使用私钥解密 结果在(decrypted.txt)
+openssl rsautl -decrypt -inkey private.pem -in file.ssl -out decrypted.txt
+
+# 4.类型转换 (pem =&gt; der)
+openssl rsa -in key.pem -outform DER -out keyout.der
+</code></pre>
+
+<p><strong>◆Issuer (证书的发布机构)</strong></p>
+
+<blockquote>
+<p>指出是什么机构发布的这个证书，也就是指明这个证书是哪个公司创建的(只是创建证书，不是指证书的使用者)。对于上面的这个证书来说，就是指&rdquo;SecureTrust CA&rdquo;这个机构。</p>
+</blockquote>
+
+<p><strong>◆Valid from , Valid to (证书的有效期)</strong></p>
+
+<blockquote>
+<p>也就是证书的有效时间，或者说证书的使用期限。 过了有效期限，证书就会作废，不能使用了。</p>
+</blockquote>
+
+<p><strong>◆Public key (公钥)</strong></p>
+
+<blockquote>
+<p>这个我们在前面介绍公钥密码体制时介绍过，公钥是用来对消息进行加密的，第2章的例子中经常用到的。这个数字证书的公钥是2048位的，它的值可以在图的中间的那个对话框中看得到，是很长的一串数字。</p>
+</blockquote>
+
+<p><strong>◆Subject (主题)</strong></p>
+
+<blockquote>
+<p>这个证书是发布给谁的，或者说证书的所有者，一般是某个人或者某个公司名称、机构的名称、公司网站的网址等。 对于这里的证书来说，证书的所有者是Trustwave这个公司。</p>
+</blockquote>
+
+<p><strong>◆Signature algorithm (签名所使用的算法)</strong></p>
+
+<blockquote>
+<p>就是指的这个数字证书的数字签名所使用的加密算法，这样就可以使用证书发布机构的证书里面的公钥，根据这个算法对指纹进行解密。指纹的加密结果就是数字签名(第1.5节中解释过数字签名)。</p>
+</blockquote>
+
+<p><strong>◆Thumbprint, Thumbprint algorithm (指纹以及指纹算法)</strong></p>
+
+<blockquote>
+<p>这个是用来保证证书的完整性的，也就是说确保证书没有被修改过，这东西的作用和2.7中说到的第3个问题类似。 其原理就是在发布证书时，发布者根据指纹算法(一个hash算法)计算整个证书的hash值(指纹)并和证书放在一起，使用者在打开证书时，自己也根据指纹算法计算一下证书的hash值(指纹)，如果和刚开始的值对得上，就说明证书没有被修改过，因为证书的内容被修改后，根据证书的内容计算的出的hash值(指纹)是会变化的。 注意，这个指纹会使用&rdquo;SecureTrust CA&rdquo;这个证书机构的私钥用签名算法(Signature algorithm)加密后和证书放在一起。
+&gt; 注意，为了保证安全，在证书的发布机构发布证书时，证书的指纹和指纹算法，都会加密后再和证书放到一起发布，以防有人修改指纹后伪造相应的数字证书。这里问题又来了，证书的指纹和指纹算法用什么加密呢？他们是用证书发布机构的私钥进行加密的。可以用证书发布机构的公钥对指纹和指纹算法解密，也就是说证书发布机构除了给别人发布证书外，他自己本身也有自己的证书。证书发布机构的证书是哪里来的呢？？？这个证书发布机构的数字证书(一般由他自己生成)在我们的操作系统刚安装好时(例如windows xp等操作系统)，这些证书发布机构的数字证书就已经被微软(或者其它操作系统的开发机构)安装在操作系统中了，微软等公司会根据一些权威安全机构的评估选取一些信誉很好并且通过一定的安全认证的证书发布机构，把这些证书发布机构的证书默认就安装在操作系统里面了，并且设置为操作系统信任的数字证书。这些证书发布机构自己持有与他自己的数字证书对应的私钥，他会用这个私钥加密所有他发布的证书的指纹作为数字签名。</p>
+</blockquote>
+
+<h3 id="3-2-如何向证书的发布机构去申请证书">3.2 如何向证书的发布机构去申请证书</h3>
+
+<p>举个例子方便大家理解，假设我们公司&rdquo;ABC Company&rdquo;花了1000块钱，向一个证书发布机构&rdquo;SecureTrust CA&rdquo;为我们自己的公司&rdquo;ABC Company&rdquo;申请了一张证书，注意，这个证书发布机构&rdquo;SecureTrust CA&rdquo;是一个大家公认并被一些权威机构接受的证书发布机构，我们的操作系统里面已经安装了&rdquo;SecureTrust CA&rdquo;的证书。&rdquo;SecureTrust CA&rdquo;在给我们发布证书时，把Issuer,Public key,Subject,Valid from,Valid to等信息以明文的形式写到证书里面，然后用一个指纹算法计算出这些数字证书内容的一个指纹，并把指纹和指纹算法用自己的私钥进行加密，然后和证书的内容一起发布，同时&rdquo;SecureTrust CA&rdquo;还会给一个我们公司&rdquo;ABC Company&rdquo;的私钥给到我们。我们花了1000块钱买的这个证书的内容如下：</p>
+
+<pre><code class="language-yaml">×××××××××××××××证书内容开始×××××××××××××××××
+
+Issuer : SecureTrust CA
+
+Subject : ABC Company
+
+Valid from ： 某个日期
+
+Valid to： 某个日期
+
+Public Key : 一串很长的数字
+
+…… 其它的一些证书内容……
+
+{证书的指纹和计算指纹所使用的指纹算法}[SecureTrust CA的私钥|RSA]      //这个就是&quot;SecureTrust CA&quot;对这个证书的一个数字签名，表示这个证书确实是他发布的，有什么问题他会负责(收了我们1000块，出了问题肯定要负责任的)
+
+// 记不记得前面的约定？{} 表示RSA加密后的内容，[ | ]表示用什么密钥和算法进行加密
+×××××××××××××××证书内容结束×××××××××××××××××
+</code></pre>
+
+<p>我们&rdquo;ABC Company&rdquo;申请到这个证书后，我们把证书投入使用，我们在通信过程开始时会把证书发给对方，对方如何检查这个证书的确是合法的并且是我们&rdquo;ABC Company&rdquo;公司的证书呢？首先应用程序(对方通信用的程序，例如IE、OUTLook等)读取证书中的Issuer(发布机构)为&rdquo;SecureTrust CA&rdquo; ，然后会在操作系统中受信任的发布机构的证书中去找&rdquo;SecureTrust CA&rdquo;的证书，如果找不到，那说明证书的发布机构是个水货发布机构，证书可能有问题，程序会给出一个错误信息。 如果在系统中找到了&rdquo;SecureTrust CA&rdquo;的证书，那么应用程序就会从证书中取出&rdquo;SecureTrust CA&rdquo;的公钥，然后对我们&rdquo;ABC Company&rdquo;公司的证书里面的指纹和指纹算法用这个公钥进行解密，然后使用这个指纹算法计算&rdquo;ABC Company&rdquo;证书的指纹，将这个计算的指纹与放在证书中的指纹对比，如果一致，说明&rdquo;ABC Company&rdquo;的证书肯定没有被修改过并且证书是&rdquo;SecureTrust CA&rdquo; 发布的，证书中的公钥肯定是&rdquo;ABC Company&rdquo;的。对方然后就可以放心的使用这个公钥和我们&rdquo;ABC Company&rdquo;进行通信了。</p>
+
+<p><strong>★这个部分非常重要，一定要理解，您可以重新回顾一下之前的两章“1、基础知识”和“ 2、一个加密通信过程的演化”，然后再来理解这部分的内容。如果您把这节的内容看了几遍还没有搞懂证书的工作原理，您可以留言指出我没有说清楚的内容，我好方便进行修正。</strong></p>
+
+<h3 id="3-3-证书的发布机构">3.3 证书的发布机构</h3>
+
+<p>前面已经初步介绍了一下证书发布机构，这里再深入讨论一下。</p>
+
+<p>其实所有的公司都可以发布证书，我们自己也可以去注册一家公司来专门给别人发布证书。但是很明显，我们自己的专门发布证书的公司是不会被那些国际上的权威机构认可的，人家怎么知道你是不是个狗屁皮包公司？因此微软在它的操作系统中，并不会信任我们这个证书发布机构，当应用程序在检查证书的合法信的时候，一看证书的发布机构并不是操作系统所信任的发布机构，就会抛出错误信息。也就是说windows操作系统中不会预先安装好我们这个证书发布机构的证书，不信任我们这个发布机构。</p>
+
+<p>  </p>
+
+<p><strong>不受信任的证书发布机构的危害:</strong>
+&gt; 为什么一个证书发布机构受不受信任这么重要？我们举个例子。假设我们开了一个狗屁公司来为别人发布证书，并且我和微软有一腿，微软在他们的操作系统中把我设置为了受信任的证书发布机构。现在如果有个小公司叫Wicrosoft 花了10块钱让我为他们公司申请了一个证书，并且公司慢慢壮大，证书的应用范围也越来越广。然后有个奸商的公司JS Company想冒充Wicrosoft，于是给了我￥10000，让我为他们颁布一个证书，但是证书的名字(Subject)要写Wicrosoft，假如我为了这￥10000，真的把证书给了他们，那么他们以后就可以使用这个证书来冒充Wicrosoft了。</p>
+
+<p>如果是一个优秀的证书发布机构，比如你要向他申请一个名字叫Wicrosoft的证书，它会让你提供很多资料证明你确实可以代表Wicrosoft这个公司，也就是说他回去核实你的身份。证书发布机构是要为他发布出的证书负法律责任的。</p>
+
+<p>  
+到这里，你可能会想，那我们自己就不能发布证书吗？就一定要花钱去申请？当然不是，我们自己也可以成立证书发布机构，但是需要通过一些安全认证等等，只是有点麻烦。另外，如果数字证书只是要在公司内部使用，公司可以自己给自己生成一个证书，在公司的所有机器上把这个证书设置为操作系统信任的证书发布机构的证书(这句话仔细看清楚，有点绕口)，这样以后公司发布的证书在公司内部的所有机器上就可以通过验证了(在发布证书时，把这些证书的Issuer(发布机构)设置为我们自己的证书发布机构的证书的Subject(主题)就可以了)。但是这只限于内部应用，因为只有我们公司自己的机器上设置了信任我们自己这个所谓的证书发布机构，而其它机器上并没有事先信任我们这个证书发布机构，所以在其它机器上，我们发布的证书就无法通过安全验证。</p>
+
+<h3 id="3-4-在windows中对数字证书进行管理">3.4. 在windows中对数字证书进行管理</h3>
+
+<p>windows 证书相关请阅读<a href="http://www.cnblogs.com/JeffreySun/archive/2010/06/24/1627247.html">原文</a></p>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  var githubOwner = 'simeon49'
+  var githubCommentRepo = 'https:\/\/github.com\/simeon49\/blog-comment'
+  var githubOuthId = '7a79f65d787c3017615e'
+  var githubSecret = 'f470953845b463ed92aef35707320209fba3ba9f'
+
+  var gitment = new Gitment({
+    
+    owner: githubOwner,
+    repo: githubCommentRepo,
+    oauth: {
+      client_id: githubOuthId,
+      client_secret: githubSecret,
+    },
+  })
+  gitment.render('container')
+</script>
+
+            
+
+            
+                <ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+</ul>
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/simeon49">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> Simeon
+    
+    </p>
+    
+</footer>
+
+        </section>
+
+        <script src="https://simeon49.github.io/blog/js/jquery-3.3.1.min.js"></script>
+<script src="https://simeon49.github.io/blog/js/main.js"></script>
+<script src="https://simeon49.github.io/blog/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'your_google_analytics_id', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+    </body>
+</html>
