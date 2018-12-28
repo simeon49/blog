@@ -231,26 +231,32 @@ var user = {
             
 
             
-                <div id="container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-  var githubOwner = 'simeon49'
-  var githubCommentRepo = 'blog-comment'
-  var githubOuthId = '7a79f65d787c3017615e'
-  var githubSecret = 'f470953845b463ed92aef35707320209fba3ba9f'
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'simeon49';
 
-  var gitment = new Gitment({
-    
-    owner: githubOwner,
-    repo: githubCommentRepo,
-    oauth: {
-      client_id: githubOuthId,
-      client_secret: githubSecret,
-    },
-  })
-  gitment.render('container')
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+        
+        var disquesLoaded = false;
+        dsq.onload = function () {
+            disquesLoaded = true;
+        };
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+        setTimeout(() => {
+            if (!disquesLoaded) {
+                alert('加载disques 失败!');
+            }
+        }, 3000);
+
+    })();
 </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
 
             
 
