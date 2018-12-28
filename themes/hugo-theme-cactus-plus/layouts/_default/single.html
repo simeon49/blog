@@ -40,7 +40,7 @@
             {{ end }}
 
             {{ if .Site.Params.enableComment }}
-                {{ partial "comment.html" . }}
+                {{ partial "disqus.html" . }}
             {{ end }}
 
             {{ if .Site.Params.showLatestPosts }}

@@ -21,11 +21,11 @@ publishDir = "public"
 
 	# 是否启用评论功能(使用github仓库作为评论系统)
 	enableComment = true
-	githubOwner = "simeon49"
-	githubCommentRepo = "blog-comment"
-	githubOuthId = "7a79f65d787c3017615e"
-	githubSecret = "f470953845b463ed92aef35707320209fba3ba9f"
-	# disqusShortname = "simeon49"		// disques [第三方评论系统] 在国内无法使用
+	# githubOwner = "simeon49"
+	# githubCommentRepo = "blog-comment"
+	# githubOuthId = "7a79f65d787c3017615e"
+	# githubSecret = "f470953845b463ed92aef35707320209fba3ba9f"
+	disqusShortname = "simeon49"		# disques [第三方评论系统] 在国内无法使用
 
 	enableSummary = true
 	# Set the value to true if use description in post front matter replace content summary
