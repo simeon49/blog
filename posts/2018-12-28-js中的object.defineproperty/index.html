@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		 
+			
+  
+    <meta name="twitter:card" content="summary"/>
+    
+      <meta name="twitter:image" content="https://simeon49.github.io/blog/images/avatar.jpg" />
+    
+  
+  
+  <meta name="twitter:title" content="js中的神奇方法Object.defineProperty"/>
+  <meta name="twitter:description" content="js中的神奇方法Object.defineProperty"/>
+  
+    <meta name="twitter:site" content="@your_twitter_id"/>
+  
+  
+  
+  
+    <meta name="twitter:creator" content="@Simeon"/>
+  
+
+
+
+		
+		<meta name="author" content="Simeon">
+		<meta name="description" content="Simeon 个人微博">
+		<meta name="generator" content="Hugo 0.52" />
+		<title>js中的神奇方法Object.defineProperty &middot; Simeon&#39;s blog</title>
+		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/font-awesome.min.css">
+		
+
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://simeon49.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://simeon49.github.io/blog/posts'>Archive</a>
+	<a href='https://simeon49.github.io/blog/tags'>Tags</a>
+	<a href='https://simeon49.github.io/blog/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        js中的神奇方法Object.defineProperty
+                    </h1>
+                    <h2 class="headline">
+                    Dec 28, 2018 00:00
+                    · 869 words
+                    · 2 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://simeon49.github.io/blog/tags/js">js</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/object.defineproperty">object.defineProperty</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>一年多前开始接触前端,从用原生(html+js+css)的简单页面到使用框架(jquery, vue, angular, ionic)构建的稍微复杂的前端页面/app. 十分感慨前端技术的进步迅速, 今天要说的 Object.deineProperty 其实是ES5.1 就存在的一个js的方法, vue与angular利用它实现了数据与视图的变化绑定(MV)</p>
+
+<hr />
+
+<h3 id="认识-object-deineproperty">认识 Object.deineProperty</h3>
+
+<h4 id="语法">语法</h4>
+
+<blockquote>
+<p>Object.defineProperty(obj, prop, descriptor)</p>
+</blockquote>
+
+<p><strong>参数:</strong>
+- <code>obj</code>: 要在其上定义属性的对象
+- <code>prop</code>: 要定义或修改的属性的名称
+- <code>descriptor</code>: 将被定义或修改的属性描述符(可选参数)</p>
+
+<p><strong>descriptor的6个属性:</strong>
+| 属性名      | 默认值   | 作用     |
+| &mdash;&mdash;&ndash;   | &mdash;&ndash;:  | :&mdash;-:  |
+| <strong><code>configurable</code></strong> | <em>false</em> |  当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除|
+| <strong><code>enumerable</code></strong> | <em>false</em> | 是否能被 for in, Object.keys 枚举 |
+| <strong><code>value</code></strong> | <em>undefine</em> | 该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等 |
+| <strong><code>writable</code></strong>| <em>false</em> | 当且仅当该属性的writable为true时，value才能被赋值运算符改变 |
+| <strong><code>get</code></strong>| <em>undefine</em> | 一个给属性提供 getter 的方法，如果没有 getter 则为 undefined。当访问该属性时，该方法会被执行，方法执行时没有参数传入，但是会传入this对象（由于继承关系，这里的this并不一定是定义该属性的对象） |
+| <strong><code>set</code></strong>| <em>undefine</em> | 一个给属性提供 setter 的方法，如果没有 setter 则为 undefined。当属性值修改时，触发执行该方法。该方法将接受唯一参数，即该属性新的参数值 |</p>
+
+<p>阅读<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">官方文档</a></p>
+
+<h4 id="例子">例子</h4>
+
+<p><strong>1.<code>configurable</code>, <code>enumerable</code>, <code>value</code>, <code>writable</code>的使用</strong></p>
+
+<pre><code class="language-js">/**
+ * 先看一个普通的对象定义
+ */
+var user = {name: 'Simeon'};
+Object.getOwnPropertyDescriptor(user, 'name');
+// {value: &quot;Tom&quot;, writable: true, enumerable: true, configurable: true}
+
+/**
+ * 使用 Object.defineProperty 方法定义
+ */
+var user = {};
+Object.defineProperty(user, 'name', {
+    value: 'Simeon'
+});
+Object.getOwnPropertyDescriptor(user, 'name');
+// {value: &quot;Simeon&quot;, writable: false, enumerable: false, configurable: false} (注意属性的默认值)
+console.log(user.name);    // &quot;Simeon&quot;
+user.name = 'nobody';
+console.log(user.name);    // &quot;Simeon&quot; 这是因为 &quot;writable&quot; 为false
+console.log(Object.keys(user)); // &quot;[]&quot; 这是因为 &quot;enumerable&quot; 为false
+Object.defineProperty(user, 'name', {
+    value: 'Simeon',
+    configurable: true,
+    enumerable: true,
+    writable: true,
+}); // 报错: &quot;Uncaught TypeError: Cannot redefine property: name&quot; 这是因为 首次设置的&quot;configurable&quot;为 默认值 false
+</code></pre>
+
+<p><strong>2.<code>get</code>, <code>set</code>的使用</strong></p>
+
+<pre><code class="language-js">var user = {};
+Object.defineProperty(user, 'name', {
+    get: function() {
+        console.log('get');
+        return user._name;
+    },
+    set: function(value) {
+        console.log('set');
+        user._name = value;
+    }
+})
+console.log(user.name);     // get\n undifined
+user.name = 'Simeon';       // set
+console.log(user.name);     // get\n Simeon
+</code></pre>
+
+<blockquote>
+<p>上面的例子还有一种简便的写法</p>
+</blockquote>
+
+<pre><code class="language-js">// 这种方式只能在声明时使用
+var user = {
+    get name() {return this._name;},
+    set name(value) {this._name = value;}
+};
+</code></pre>
+
+<h3 id="一个简单的-数据与视图的变化绑定-的实现">一个简单的&rdquo;数据与视图的变化绑定&rdquo;的实现</h3>
+
+<p>直接看<a href="https://github.com/simeon49/javascript-practices/blob/master/22_%E6%95%B0%E6%8D%AE%E8%A7%86%E5%9B%BE%E7%BB%91%E5%AE%9A.html">源码</a>
+直接看<a href="https://simeon49.github.io/javascript-practices/22_%E6%95%B0%E6%8D%AE%E8%A7%86%E5%9B%BE%E7%BB%91%E5%AE%9A.html">Demo</a></p>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+  var githubOwner = 'simeon49'
+  var githubCommentRepo = 'blog-comment'
+  var githubOuthId = '7a79f65d787c3017615e'
+  var githubSecret = 'f470953845b463ed92aef35707320209fba3ba9f'
+
+  var gitment = new Gitment({
+    
+    owner: githubOwner,
+    repo: githubCommentRepo,
+    oauth: {
+      client_id: githubOuthId,
+      client_secret: githubSecret,
+    },
+  })
+  gitment.render('container')
+</script>
+
+            
+
+            
+                <ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/blog/posts/2018-12-24-%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E5%8E%9F%E7%90%86/">数字签名原理<aside class="dates">Dec 24 2018</aside></a>
+        </li>
+    
+</ul>
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/simeon49">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2018 <i class="fa fa-heart" aria-hidden="true"></i> Simeon
+    
+    </p>
+    
+</footer>
+
+        </section>
+
+        <script src="https://simeon49.github.io/blog/js/jquery-3.3.1.min.js"></script>
+<script src="https://simeon49.github.io/blog/js/main.js"></script>
+<script src="https://simeon49.github.io/blog/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+  
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'your_google_analytics_id', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+
+
+    </body>
+</html>
