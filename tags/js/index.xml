@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Js on Simeon&#39;s blog</title>
+    <link>https://simeon49.github.io/blog/tags/js/</link>
+    <description>Recent content in Js on Simeon&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-Hans-CN</language>
+    <lastBuildDate>Fri, 28 Dec 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://simeon49.github.io/blog/tags/js/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>js中的神奇方法Object.defineProperty</title>
+      <link>https://simeon49.github.io/blog/posts/2018-12-28-js%E4%B8%AD%E7%9A%84object.defineproperty/</link>
+      <pubDate>Fri, 28 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2018-12-28-js%E4%B8%AD%E7%9A%84object.defineproperty/</guid>
+      <description>一年多前开始接触前端,从用原生(html+js+css)的简单页面到使用框架(jquery, vue, angular, ionic)构建的稍微复杂的前端页面/app</description>
+    </item>
+    
+    <item>
+      <title>使用web_API处理图片</title>
+      <link>https://simeon49.github.io/blog/posts/2018-12-28-%E4%BD%BF%E7%94%A8web_api%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/</link>
+      <pubDate>Mon, 24 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2018-12-28-%E4%BD%BF%E7%94%A8web_api%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/</guid>
+      <description>国外有一个人写了一篇文章, 大致内容就是通过将图片红,绿,蓝,三色的数据分别进行滤波得到新的图片,在这篇文章中我挑重点解释一下原文作者的意图 直</description>
+    </item>
+    
+  </channel>
+</rss>
