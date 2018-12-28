@@ -68,7 +68,7 @@
                     </h1>
                     <h2 class="headline">
                     Dec 28, 2018 00:00
-                    · 869 words
+                    · 834 words
                     · 2 minute read
                       <span class="tags">
                       
@@ -99,20 +99,63 @@
 <p>Object.defineProperty(obj, prop, descriptor)</p>
 </blockquote>
 
-<p><strong>参数:</strong>
-- <code>obj</code>: 要在其上定义属性的对象
-- <code>prop</code>: 要定义或修改的属性的名称
-- <code>descriptor</code>: 将被定义或修改的属性描述符(可选参数)</p>
+<p><strong>参数:</strong></p>
 
-<p><strong>descriptor的6个属性:</strong>
-| 属性名      | 默认值   | 作用     |
-| &mdash;&mdash;&ndash;   | &mdash;&ndash;:  | :&mdash;-:  |
-| <strong><code>configurable</code></strong> | <em>false</em> |  当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除|
-| <strong><code>enumerable</code></strong> | <em>false</em> | 是否能被 for in, Object.keys 枚举 |
-| <strong><code>value</code></strong> | <em>undefine</em> | 该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等 |
-| <strong><code>writable</code></strong>| <em>false</em> | 当且仅当该属性的writable为true时，value才能被赋值运算符改变 |
-| <strong><code>get</code></strong>| <em>undefine</em> | 一个给属性提供 getter 的方法，如果没有 getter 则为 undefined。当访问该属性时，该方法会被执行，方法执行时没有参数传入，但是会传入this对象（由于继承关系，这里的this并不一定是定义该属性的对象） |
-| <strong><code>set</code></strong>| <em>undefine</em> | 一个给属性提供 setter 的方法，如果没有 setter 则为 undefined。当属性值修改时，触发执行该方法。该方法将接受唯一参数，即该属性新的参数值 |</p>
+<ul>
+<li><code>obj</code>: 要在其上定义属性的对象</li>
+<li><code>prop</code>: 要定义或修改的属性的名称</li>
+<li><code>descriptor</code>: 将被定义或修改的属性描述符(可选参数)</li>
+</ul>
+
+<p><strong>descriptor的6个属性:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th align="right">默认值</th>
+<th align="center">作用</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong><code>configurable</code></strong></td>
+<td align="right"><em>false</em></td>
+<td align="center">当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，同时该属性也能从对应的对象上被删除</td>
+</tr>
+
+<tr>
+<td><strong><code>enumerable</code></strong></td>
+<td align="right"><em>false</em></td>
+<td align="center">是否能被 for in, Object.keys 枚举</td>
+</tr>
+
+<tr>
+<td><strong><code>value</code></strong></td>
+<td align="right"><em>undefine</em></td>
+<td align="center">该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等</td>
+</tr>
+
+<tr>
+<td><strong><code>writable</code></strong></td>
+<td align="right"><em>false</em></td>
+<td align="center">当且仅当该属性的writable为true时，value才能被赋值运算符改变</td>
+</tr>
+
+<tr>
+<td><strong><code>get</code></strong></td>
+<td align="right"><em>undefine</em></td>
+<td align="center">一个给属性提供 getter 的方法，如果没有 getter 则为 undefined。当访问该属性时，该方法会被执行，方法执行时没有参数传入，但是会传入this对象（由于继承关系，这里的this并不一定是定义该属性的对象）</td>
+</tr>
+
+<tr>
+<td><strong><code>set</code></strong></td>
+<td align="right"><em>undefine</em></td>
+<td align="center">一个给属性提供 setter 的方法，如果没有 setter 则为 undefined。当属性值修改时，触发执行该方法。该方法将接受唯一参数，即该属性新的参数值</td>
+</tr>
+</tbody>
+</table>
 
 <p>阅读<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty">官方文档</a></p>
 
