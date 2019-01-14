@@ -6,10 +6,19 @@
     <description>Recent content on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
-    <lastBuildDate>Sat, 29 Dec 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://simeon49.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>虚拟DOM</title>
+      <link>https://simeon49.github.io/blog/posts/2019-01-14-%E8%99%9A%E6%8B%9Fdom/</link>
+      <pubDate>Mon, 14 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2019-01-14-%E8%99%9A%E6%8B%9Fdom/</guid>
+      <description>什么是虚拟DOM 前端的DOM操作是一个非常消耗性能的事, 因为每一个DOM元素对象拥有很多的属性 const divDom = document.createElement(&#39;div&#39;); for (let key in divDom) { console.log(key); // 大概可以打印出200+</description>
+    </item>
     
     <item>
       <title>简单的前端MVC实现</title>
