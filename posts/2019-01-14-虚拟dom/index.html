@@ -68,7 +68,7 @@
                     </h1>
                     <h2 class="headline">
                     Jan 14, 2019 00:00
-                    · 1636 words
+                    · 1632 words
                     · 4 minute read
                       <span class="tags">
                       
@@ -186,11 +186,14 @@ for (let key in divDom) {
 
 <h2 id="原理">原理:</h2>
 
-<p>从上面的过程不难看出 虚拟dom的4个过程:
-&gt; 1.抽象html -&gt; js tree结构<br>
-&gt; 2.抽象变化后的html -&gt; js newTree结构<br>
-&gt; 3.比较两棵树的变化 生成patchDic<br>
-&gt; 4.在tree上应用 patchDic 使得 tree与 newTree有相同的Dom结构</p>
+<p>从上面的过程不难看出 虚拟dom的4个过程:</p>
+
+<blockquote>
+<p>1.抽象html -&gt; js tree结构<br>
+2.抽象变化后的html -&gt; js newTree结构<br>
+3.比较两棵树的变化 生成patchDic<br>
+4.在tree上应用 patchDic 使得 tree与 newTree有相同的Dom结构</p>
+</blockquote>
 
 <p>步骤1,2 的代码实现:</p>
 
