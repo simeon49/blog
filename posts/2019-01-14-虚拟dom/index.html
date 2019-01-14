@@ -188,12 +188,12 @@ for (let key in divDom) {
 
 <p>从上面的过程不难看出 虚拟dom的4个过程:</p>
 
-<blockquote>
-<p>1.抽象html -&gt; js tree结构<br>
-2.抽象变化后的html -&gt; js newTree结构<br>
-3.比较两棵树的变化 生成patchDic<br>
-4.在tree上应用 patchDic 使得 tree与 newTree有相同的Dom结构</p>
-</blockquote>
+<ul>
+<li>1.抽象html -&gt; js tree结构</li>
+<li>2.抽象变化后的html -&gt; js newTree结构</li>
+<li>3.比较两棵树的变化 生成patchDic</li>
+<li>4.在tree上应用 patchDic 使得 tree与 newTree有相同的Dom结构</li>
+</ul>
 
 <p>步骤1,2 的代码实现:</p>
 
