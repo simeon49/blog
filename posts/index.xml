@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
-    <lastBuildDate>Mon, 14 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 15 Jan 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://simeon49.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>一道神奇的前端附加题</title>
+      <link>https://simeon49.github.io/blog/posts/2019-01-15-%E4%B8%80%E9%81%93%E7%A5%9E%E5%A5%87%E7%9A%84%E5%89%8D%E7%AB%AF%E9%99%84%E5%8A%A0%E9%A2%98/</link>
+      <pubDate>Tue, 15 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2019-01-15-%E4%B8%80%E9%81%93%E7%A5%9E%E5%A5%87%E7%9A%84%E5%89%8D%E7%AB%AF%E9%99%84%E5%8A%A0%E9%A2%98/</guid>
+      <description>在知乎上有一篇文章 文中提给了一道前端附加题, 问题是在一个闭包里有一个对象&amp;rdquo;o&amp;rdquo; 它有N多属性, 在不修改下面代码的前提</description>
+    </item>
     
     <item>
       <title>虚拟DOM</title>

@@ -13,8 +13,8 @@
     
   
   
-  <meta name="twitter:title" content="使用web_API处理图片"/>
-  <meta name="twitter:description" content="使用web_API处理图片"/>
+  <meta name="twitter:title" content="一道神奇的前端附加题"/>
+  <meta name="twitter:description" content="一道神奇的前端附加题"/>
   
     <meta name="twitter:site" content="@your_twitter_id"/>
   
@@ -30,7 +30,7 @@
 		<meta name="author" content="Simeon">
 		<meta name="description" content="Simeon 个人微博">
 		<meta name="generator" content="Hugo 0.52" />
-		<title>使用web_API处理图片 &middot; Simeon&#39;s blog</title>
+		<title>一道神奇的前端附加题 &middot; Simeon&#39;s blog</title>
 		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
@@ -64,19 +64,17 @@
             <article>
                 <header>
                     <h1>
-                        使用web_API处理图片
+                        一道神奇的前端附加题
                     </h1>
                     <h2 class="headline">
-                    Dec 24, 2018 00:00
-                    · 116 words
-                    · 1 minute read
+                    Jan 15, 2019 00:00
+                    · 525 words
+                    · 2 minute read
                       <span class="tags">
                       
                       
                           
                               <a href="https://simeon49.github.io/blog/tags/js">js</a>
-                          
-                              <a href="https://simeon49.github.io/blog/tags/%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86">图片处理</a>
                           
                       
                       
@@ -85,14 +83,36 @@
                 </header>
                 
                 <section id="post-body">
-                    <p>国外有一个人写了一篇<a href="https://medium.com/statuscode/filtering-images-using-web-audio-api-276555cca6ad">文章</a>, 大致内容就是通过将图片红,绿,蓝,三色的数据分别进行滤波得到新的图片,在这篇文章中我挑重点解释一下原文作者的意图</p>
+                    <p>在知乎上有一篇<a href="https://zhuanlan.zhihu.com/p/25672454">文章</a> 文中提给了一道前端附加题, 问题是在一个闭包里有一个对象&rdquo;o&rdquo; 它有N多属性, 在不修改下面代码的前提下, 编写代码获取这个对象的所有属性.</p>
 
-<hr />
+<pre><code class="language-js">var foo = (function() {
+    var o = {
+        a: 1,
+        b: 2,
+        /**更多属性**/
+    };
+    return function(key) {
+        return o[key];
+    };
+})();
+</code></pre>
 
-<p>直接看<a href="https://github.com/simeon49/javascript-practices/blob/master/project_05_%E4%BD%BF%E7%94%A8web_API%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/index.html">源码</a> <br>
-直接看<a href="https://simeon49.github.io/javascript-practices/project_05_%E4%BD%BF%E7%94%A8web_API%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/index.html">Demo</a> <strong>请使用FireFox</strong>  <br></p>
+<p>原文对这道的解法有详细的解释. 在这里自己做一个记录.</p>
 
-<p>ruanyyifeng写的<a href="http://www.ruanyifeng.com/blog/2017/12/image-and-wave-filters.html">文章</a>很详细,看这篇文章吧</p>
+<p>foo是一个函数,传递一个key值返回&rdquo;o&rdquo;对象对应的value(比如: key=&lsquo;a&rsquo;, 则返回 1). 如果通过foo能拿到&rdquo;o&rdquo;对象, 这道题就迎刃而解了(Object.keys获取对象的所有属性).<br></p>
+
+<p>我们知道在js中所有的对象的构造函数都是Object. 也知道当获取对象的属性时先会查找自身的属性,如果没有找到会到原型链上找,而最后一个原型链就是Object.prototype. 如果我们为Object的原型添加一个属性&rdquo;self&rdquo;, 这个属性返回对象自己&rdquo;this&rdquo;, 这样在调用foo(&lsquo;self&rsquo;)
+&lt;==&gt;o[&lsquo;self&rsquo;] 就会返回我们想要的对象&rdquo;o&rdquo;</p>
+
+<pre><code class="language-js">Object.defineProperty(Object.prototype, 'self', {
+    get() { return this; }
+});
+
+var o = foo('self');
+console.log(Object.keys(0)); // ['a', 'b']
+</code></pre>
+
+<p>如果不了解difinePropery可以参考我以前的<a href="https://simeon49.github.io/blog/posts/2018-12-28-js中的object.defineproperty/">博客</a></p>
 
                 </section>
             </article>
@@ -137,10 +157,6 @@
     
     
         <li>
-            <a href="/blog/posts/2019-01-15-%E4%B8%80%E9%81%93%E7%A5%9E%E5%A5%87%E7%9A%84%E5%89%8D%E7%AB%AF%E9%99%84%E5%8A%A0%E9%A2%98/">一道神奇的前端附加题<aside class="dates">Jan 15 2019</aside></a>
-        </li>
-    
-        <li>
             <a href="/blog/posts/2019-01-14-%E8%99%9A%E6%8B%9Fdom/">虚拟DOM<aside class="dates">Jan 14 2019</aside></a>
         </li>
     
@@ -150,6 +166,10 @@
     
         <li>
             <a href="/blog/posts/2018-12-28-js%E4%B8%AD%E7%9A%84object.defineproperty/">js中的神奇方法Object.defineProperty<aside class="dates">Dec 28 2018</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2018-12-28-%E4%BD%BF%E7%94%A8web_api%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/">使用web_API处理图片<aside class="dates">Dec 24 2018</aside></a>
         </li>
     
         <li>
