@@ -11,7 +11,7 @@ publishDir = "public"
 [params]
 	author = "Simeon"
 	description = "Simeon 个人微博"
-	bio = "לבי משתוקק לירושלים"
+	# bio = "לבי משתוקק לירושלים"
 
 	twitter = "your_twitter_id"
 	facebook = "your_facebook_id"
@@ -32,12 +32,12 @@ publishDir = "public"
 	useDescriptionReplaceSummary = false
 
 
-	enableGoogleAnalytics = true
-	enableBaiduAnalytics = false
+	enableGoogleAnalytics = false
+	enableBaiduAnalytics = true
 	# Set the value to your baidu analysis code if you want to use baidu analytics
-	baiduAnalytics = 'your_baidu_analysis_code'
+	baiduAnalytics = '74fafdde017951e1df78c761e7c017bc'
 
-	enableTwitterCard = true
+	enableTwitterCard = false
 	# The url for twitter card image, default is avatar.jpg in static/images directory
 	twitterCardImage = ""
 
