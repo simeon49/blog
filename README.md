@@ -28,7 +28,7 @@ rm -rf .git/worktrees/public
 git worktree add -B gh-pages public upstream/gh-pages
 
 # 编译
-bugo
+hugo
 
 # 将结果上传到gh-pages分支上
 cd public && git add --all && git commit -am 'publish new' && git push && cd ..
