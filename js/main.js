@@ -33,12 +33,4 @@ function retina() {
 	});
 };
 
-function baiduStatistics() {
-	var hm = document.createElement("script");
-	hm.src = "https://hm.baidu.com/hm.js?74fafdde017951e1df78c761e7c017bc";
-	var s = document.getElementsByTagName("script")[0];
-	s.parentNode.insertBefore(hm, s);
-}
-
 $(document).ready(retina);
-$(document).ready(baiduStatistics);
