@@ -8,7 +8,7 @@
 		<meta name="author" content="Simeon">
 		<meta name="description" content="Simeon 个人微博">
 		<meta name="generator" content="Hugo 0.52" />
-		<title>简单的前端MVC实现 &middot; Simeon&#39;s blog</title>
+		<title>程序设计思考-重复 &middot; Simeon&#39;s blog</title>
 		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
@@ -43,17 +43,17 @@
             <article>
                 <header>
                     <h1>
-                        简单的前端MVC实现
+                        程序设计思考-重复
                     </h1>
                     <h2 class="headline">
-                    Dec 29, 2018 00:00
-                    · 1341 words
-                    · 3 minute read
+                    Jan 23, 2019 00:00
+                    · 961 words
+                    · 2 minute read
                       <span class="tags">
                       
                       
                           
-                              <a href="https://simeon49.github.io/blog/tags/mvc">mvc</a>
+                              <a href="https://simeon49.github.io/blog/tags/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1">程序设计</a>
                           
                       
                       
@@ -64,51 +64,58 @@
                 <section id="post-body">
                     
 
-<p>做过前端的对MVC, MVVC 至少和我一样很耳熟, 但真的明白?
-在看过一些文章[<a href="https://github.com/livoras/blog/issues/11">界面之下：还原真实的MV*模式</a>,<br> <a href="https://blog.nodejitsu.com/scaling-isomorphic-javascript-code/">Scaling Isomorphic Javascript Code</a>&hellip;]之后, 决定自己实现一个MVC, 以后再补充(MVVC)</p>
+<p>最近在读 Andrew Hunt 与 David Thomas 的经典著作 &lt;&lt;程序员修炼之道&gt;&gt; 其中有一节在阐述程序设计中&rdquo;知识&rdquo;重复的危害(这里的知识是广义的, 对程序来说就是一些功能的代码), 文中提到的内容和我之前重构一个项目时遇到的问题有相似之处, 在此记录下来.<br></p>
 
-<h2 id="简述mvc">简述MVC</h2>
+<p>项目是一个为了促进用户消费的和粘稠度优惠券系统(商家/平台策划活动, 用户参与活动后获得优惠券并在以后的消费中使用优惠券&hellip;), 这个系统中有一个表是用来保存活动计划, 简化后的结构如下:</p>
 
-<h3 id="前端面临的问题">前端面临的问题</h3>
+<pre><code class="language-python">class ActivityPlan(BaseModel):
+    name, # 活动计划名称
 
-<p>图形界面的应用程序提供给用户可视化的操作界面，这个界面提供给数据和信息。用户输入行为（键盘，鼠标等）会执行一些应用逻辑，应用逻辑（application logic）可能会触发一定的业务逻辑（business logic）对应用程序数据的变更，数据的变更自然需要用户界面的同步变更以提供最准确的信息。例如用户对一个电子表格重新排序的操作，应用程序需要响应用户操作，对数据进行排序，然后需要同步到界面上。</p>
+    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
+    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
+    endDate,        # 活动结束时间
+    ....
+</code></pre>
 
-<p>在开发应用程序的时候，以求更好的管理应用程序的复杂性，基于<strong>职责分离（Speration of Duties）</strong>的思想都会对应用程序进行分层。在开发图形界面应用程序的时候，会把管理用户界面的层次称为View，应用程序的数据为Model（注意这里的Model指的是Domain Model，这个应用程序对需要解决的问题的数据抽象，不包含应用的状态，可以简单理解为对象）。Model提供数据操作的接口，执行相应的业务逻辑。</p>
+<p>为了方便运营直观的了解活动计划的状态, 在后台管理的界面要展示每一个活动的状态[&lsquo;待审批&rsquo;, &lsquo;审批未通过&rsquo;, &lsquo;等待发布&rsquo;, &lsquo;活动进行中&rsquo;, &lsquo;活动已结束&rsquo;&hellip;.]<br></p>
 
-<p>有了View和Model的分层，那么问题就来了：View如何同步Model的变更，View和Model之间如何粘合在一起。</p>
+<p>前端拿到活动计划后需要按照与后端的约定判断逐次判断&rdquo;approve&rdquo;, &ldquo;isPublish&rdquo;, &ldquo;endDate&rdquo;&hellip; 这些字段的值, 最后计算出最终的状态, 如果一但业务有新的变化, 无疑前后端都要重新制定新的规则并更改对应的代码, 这其实就是后端的&rdquo;知识&rdquo;在前端的重复<br></p>
 
-<p>带着这个问题开始探索MV模式，会发现这些模式之间的差异可以归纳为对这个问题处理的方式的不同。而几乎所有的MV模式都是经典的Smalltalk-80 MVC的修改版。</p>
+<h4 id="一次优化">一次优化</h4>
 
-<h3 id="mvc">MVC</h3>
+<pre><code class="language-python">class ActivityPlan(BaseModel):
+    name, # 活动计划名称
 
-<p>MVC除了把应用程序分成View、Model层，还额外的加了一个Controller层，它的职责为进行Model和View之间的协作（路由、输入预处理等）的应用逻辑（application logic）；Model进行处理业务逻辑。Model、View、Controller</p>
+    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
+    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
+    endDate,        # 活动结束时间
+    ....
 
-<ol>
-<li>View是把控制权交移给Controller，Controller执行应用程序相关的应用逻辑（对来自View数据进行预处理、决定调用哪个Model的接口等等）。</li>
-<li>Controller操作Model，Model执行业务逻辑对数据进行处理。但不会直接操作View，可以说它是对View无知的。</li>
-<li>View和Model的同步消息是通过观察者模式进行，而同步操作是由View自己请求Model的数据然后对视图进行更新。</li>
-</ol>
+    state,          # 状态
+</code></pre>
 
-<h3 id="优缺点">优缺点</h3>
+<p>前端不再需要了解后端如何判断活动计划的状态, 只需要知道每一个state对应的状态是什么即可, 但对于后端来说又有了新的问题&mdash;我们需要在过去代码中所有更改&rdquo;approve&rdquo;, &ldquo;isPublish&rdquo;&hellip; 的地方添加state字段的更新, 而且如果活动已经进入发布状态, 还需要在每次返回前端前对当前时间与endDate进行比较以便确认活动是否已经结束.</p>
 
-<p><strong>优点：</strong></p>
+<h4 id="再一次优化">再一次优化</h4>
 
-<ol>
-<li>把业务逻辑和展示逻辑分离，模块化程度高。且当应用逻辑需要变更的时候，不需要变更业务逻辑和展示逻辑，只需要Controller换成另外一个Controller就行了（Swappable Controller）。</li>
-<li>观察者模式可以做到多视图同时更新。</li>
-</ol>
+<pre><code class="language-python">class ActivityPlan(BaseModel):
+    name, # 活动计划名称
 
-<p><strong>缺点：</strong></p>
+    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
+    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
+    endDate,        # 活动结束时间
+    ....
 
-<ol>
-<li>Controller测试困难。因为视图同步操作是由View自己执行，而View只能在有UI的环境下运行。在没有UI环境下对Controller进行单元测试的时候，应用逻辑正确性是无法验证的：Model更新的时候，无法对View的更新操作进行断言。</li>
-<li>View无法组件化。View是强依赖特定的Model的，如果需要把这个View抽出来作为一个另外一个应用程序可复用的组件就困难了。因为不同程序的的Domain Model是不一样的</li>
-</ol>
+    @property
+    def state(self):          # 状态
+        if self.approve == 0:
+            return 1001     # 待审批
+        elif self.approve == -2:
+            return 1002     # 审批未通过
+        ....
+</code></pre>
 
-<hr />
-
-<p>直接看<a href="https://github.com/simeon49/javascript-practices/tree/master/project_06_MVC_%E5%AE%9E%E7%8E%B0todo_list">源码</a> <br>
-直接看<a href="https://simeon49.github.io/javascript-practices/project_06_MVC_%E5%AE%9E%E7%8E%B0todo_list/index.html">Demo</a> <br></p>
+<p>后端只在类ActivityPlan中处理state, 而无需再其它地方处理</p>
 
                 </section>
             </article>
@@ -157,10 +164,6 @@
         </li>
     
         <li>
-            <a href="/blog/posts/2019-01-24-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%80%83-%E9%87%8D%E5%A4%8D/">程序设计思考-重复<aside class="dates">Jan 23 2019</aside></a>
-        </li>
-    
-        <li>
             <a href="/blog/posts/2019-01-22-%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88/">从输入url到页面展示到底发生了什么<aside class="dates">Jan 22 2019</aside></a>
         </li>
     
@@ -174,6 +177,10 @@
     
         <li>
             <a href="/blog/posts/2019-01-14-%E8%99%9A%E6%8B%9Fdom/">虚拟DOM<aside class="dates">Jan 14 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2018-12-29-%E7%AE%80%E5%8D%95%E7%9A%84%E5%89%8D%E7%AB%AFmvc%E5%AE%9E%E7%8E%B0/">简单的前端MVC实现<aside class="dates">Dec 29 2018</aside></a>
         </li>
     
         <li>
