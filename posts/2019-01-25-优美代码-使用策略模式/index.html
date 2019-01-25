@@ -8,7 +8,7 @@
 		<meta name="author" content="Simeon">
 		<meta name="description" content="Simeon 个人微博">
 		<meta name="generator" content="Hugo 0.52" />
-		<title>程序设计思考-重复 &middot; Simeon&#39;s blog</title>
+		<title>优美代码-使用策略模式 &middot; Simeon&#39;s blog</title>
 		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
@@ -43,12 +43,12 @@
             <article>
                 <header>
                     <h1>
-                        程序设计思考-重复
+                        优美代码-使用策略模式
                     </h1>
                     <h2 class="headline">
-                    Jan 23, 2019 00:00
-                    · 1162 words
-                    · 3 minute read
+                    Jan 25, 2019 00:00
+                    · 0 word
+                    · 0 minute read
                       <span class="tags">
                       
                       
@@ -63,80 +63,6 @@
                 
                 <section id="post-body">
                     
-
-<p>最近在读 Andrew Hunt 与 David Thomas 的经典著作 &lt;&lt;程序员修炼之道&gt;&gt; 其中有一节在阐述程序设计中&rdquo;知识&rdquo;重复的危害(这里的知识是广义的, 对程序来说就是一些功能的代码), 文中提到的内容和我之前重构一个项目时遇到的问题有相似之处, 在此记录下来.<br></p>
-
-<p>项目是一个为了促进用户消费的和粘稠度优惠券系统(商家/平台策划活动, 用户参与活动后获得优惠券并在以后的消费中使用优惠券&hellip;), 这个系统中有一个表是用来保存活动计划, 简化后的结构如下:</p>
-
-<pre><code class="language-python">class ActivityPlan(BaseModel):
-    name, # 活动计划名称
-
-    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
-    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
-    endDate,        # 活动结束时间
-    ....
-</code></pre>
-
-<p>为了方便运营直观的了解活动计划的状态, 在后台管理的界面要展示每一个活动的状态[&lsquo;待审批&rsquo;, &lsquo;审批未通过&rsquo;, &lsquo;等待发布&rsquo;, &lsquo;活动进行中&rsquo;, &lsquo;活动已结束&rsquo;&hellip;.]<br></p>
-
-<p>前端拿到活动计划后需要按照与后端的约定判断逐次判断&rdquo;approve&rdquo;, &ldquo;isPublish&rdquo;, &ldquo;endDate&rdquo;&hellip; 这些字段的值, 最后计算出最终的状态, 如果一但业务有新的变化, 无疑前后端都要重新制定新的规则并更改对应的代码, 这其实就是后端的&rdquo;知识&rdquo;在前端的重复<br></p>
-
-<h4 id="一次优化">一次优化</h4>
-
-<pre><code class="language-python">class ActivityPlan(BaseModel):
-    name, # 活动计划名称
-
-    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
-    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
-    endDate,        # 活动结束时间
-    ....
-
-    state,          # 状态
-</code></pre>
-
-<p>前端不再需要了解后端如何判断活动计划的状态, 只需要知道每一个state对应的状态是什么即可, 但对于后端来说又有了新的问题&mdash;我们需要在过去代码中所有更改&rdquo;approve&rdquo;, &ldquo;isPublish&rdquo;&hellip; 的地方添加state字段的更新, 而且如果活动已经进入发布状态, 还需要在每次返回前端前对当前时间与endDate进行比较以便确认活动是否已经结束.</p>
-
-<h4 id="再一次优化">再一次优化</h4>
-
-<pre><code class="language-python">class ActivityPlan(BaseModel):
-    name, # 活动计划名称
-
-    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
-    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
-    endDate,        # 活动结束时间
-    ....
-
-    @property
-    def state(self):          # 状态
-        if self.approve == 0:
-            return 1001     # 待审批
-        elif self.approve == -2:
-            return 1002     # 审批未通过
-        ....
-</code></pre>
-
-<p>后端只在类ActivityPlan中处理state, 而无需再其它地方处理</p>
-
-<h3 id="总结">总结</h3>
-
-<p><strong>原始代码</strong></p>
-
-<blockquote>
-<p>后端代码是简洁的, 但存在前后端&rdquo;知识&rdquo;(状态的判断逻辑)上的重复</p>
-</blockquote>
-
-<p><strong>第一次的改进</strong></p>
-
-<blockquote>
-<p>解决了前后端&rdquo;知识&rdquo;上的重复问题, 但使得后端出现状态上的重复(可以认为 state 是其它几个状态字段的冗余(由其它字段计算得来)), 同时为了保持state的正确性, 需要在代码的许多地方维护state</p>
-</blockquote>
-
-<p><strong>的二次的改进</strong></p>
-
-<blockquote>
-<p>将维护state的操作局部化到类的方法中, 而不暴露到整个后端代码中</p>
-</blockquote>
-
                 </section>
             </article>
 
@@ -178,6 +104,10 @@
 
     
     
+    
+        <li>
+            <a href="/blog/posts/2019-01-24-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E4%BD%BF%E7%94%A8%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">优美代码-使用冗余字段处理问题<aside class="dates">Jan 24 2019</aside></a>
+        </li>
     
         <li>
             <a href="/blog/posts/2019-01-23-%E4%BA%A4%E6%B5%81%E6%8A%80%E5%B7%A7/">交流技巧<aside class="dates">Jan 23 2019</aside></a>
