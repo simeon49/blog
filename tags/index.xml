@@ -6,10 +6,37 @@
     <description>Recent content in Tags on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
-    <lastBuildDate>Wed, 16 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 12 Feb 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://simeon49.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Apache</title>
+      <link>https://simeon49.github.io/blog/tags/apache/</link>
+      <pubDate>Tue, 12 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/tags/apache/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bsd</title>
+      <link>https://simeon49.github.io/blog/tags/bsd/</link>
+      <pubDate>Tue, 12 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/tags/bsd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gpl</title>
+      <link>https://simeon49.github.io/blog/tags/gpl/</link>
+      <pubDate>Tue, 12 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/tags/gpl/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Js</title>
@@ -17,6 +44,24 @@
       <pubDate>Wed, 16 Jan 2019 00:00:00 +0000</pubDate>
       
       <guid>https://simeon49.github.io/blog/tags/js/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mit</title>
+      <link>https://simeon49.github.io/blog/tags/mit/</link>
+      <pubDate>Tue, 12 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/tags/mit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mozilla</title>
+      <link>https://simeon49.github.io/blog/tags/mozilla/</link>
+      <pubDate>Tue, 12 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/tags/mozilla/</guid>
       <description></description>
     </item>
     
@@ -80,6 +125,15 @@
       <pubDate>Mon, 24 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>https://simeon49.github.io/blog/tags/%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>开源协议许可</title>
+      <link>https://simeon49.github.io/blog/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE%E8%AE%B8%E5%8F%AF/</link>
+      <pubDate>Tue, 12 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/tags/%E5%BC%80%E6%BA%90%E5%8D%8F%E8%AE%AE%E8%AE%B8%E5%8F%AF/</guid>
       <description></description>
     </item>
     
