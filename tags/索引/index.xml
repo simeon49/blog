@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Sql on Simeon&#39;s blog</title>
-    <link>https://simeon49.github.io/blog/tags/sql/</link>
-    <description>Recent content in Sql on Simeon&#39;s blog</description>
+    <title>索引 on Simeon&#39;s blog</title>
+    <link>https://simeon49.github.io/blog/tags/%E7%B4%A2%E5%BC%95/</link>
+    <description>Recent content in 索引 on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
     <lastBuildDate>Thu, 28 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://simeon49.github.io/blog/tags/sql/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://simeon49.github.io/blog/tags/%E7%B4%A2%E5%BC%95/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,15 +18,6 @@
       
       <guid>https://simeon49.github.io/blog/posts/2020-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/</guid>
       <description>复习数据库方面的内容, 以下为笔记内容, 参考了[关于索引的-1, 关于索引的-2, 全文检索, 全文搜索无结果原因]&amp;hellip; 索引 索引是用来快</description>
-    </item>
-    
-    <item>
-      <title>数据库内容复习01-概述</title>
-      <link>https://simeon49.github.io/blog/posts/2019-02-26-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A001-%E6%A6%82%E8%BF%B0/</link>
-      <pubDate>Tue, 26 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://simeon49.github.io/blog/posts/2019-02-26-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A001-%E6%A6%82%E8%BF%B0/</guid>
-      <description>一边读廖雪峰的文章一边复习数据库方面的内容, 以下为笔记内容, 建议有时间的情况下阅读原文 主流数据库 商用数据库: 例如：Oracle，SQL Ser</description>
     </item>
     
   </channel>

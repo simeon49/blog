@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://simeon49.github.io/blog/posts/2020-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/</loc>
+    <loc>https://simeon49.github.io/blog/posts/2020-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/</loc>
     <lastmod>2019-02-28T00:00:00+00:00</lastmod>
   </url>
   
@@ -196,8 +196,20 @@
   </url>
   
   <url>
+    <loc>https://simeon49.github.io/blog/tags/%E4%B8%BB%E9%94%AE/</loc>
+    <lastmod>2019-02-28T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://simeon49.github.io/blog/tags/%E4%BA%A4%E6%B5%81/</loc>
     <lastmod>2019-01-23T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://simeon49.github.io/blog/tags/%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95/</loc>
+    <lastmod>2019-02-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -264,6 +276,12 @@
   <url>
     <loc>https://simeon49.github.io/blog/categories/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</loc>
     <lastmod>2019-01-26T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://simeon49.github.io/blog/tags/%E7%B4%A2%E5%BC%95/</loc>
+    <lastmod>2019-02-28T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
