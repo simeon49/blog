@@ -33,3 +33,8 @@ hugo
 # 将结果上传到gh-pages分支上
 cd public && git add --all && git commit -am 'publish new' && git push && cd ..
 ```
+
+## 一键发布:
+```bash
+./publish.sh; git add .;git commit -am 'add new article';  git push;
+```
