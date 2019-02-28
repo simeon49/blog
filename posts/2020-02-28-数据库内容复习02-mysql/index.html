@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<meta name="author" content="Simeon">
+		<meta name="description" content="Simeon 个人微博">
+		<meta name="generator" content="Hugo 0.52" />
+		<title>数据库内容复习02-MySql &middot; Simeon&#39;s blog</title>
+		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/font-awesome.min.css">
+		
+
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://simeon49.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://simeon49.github.io/blog/posts'>Archive</a>
+	<a href='https://simeon49.github.io/blog/tags'>Tags</a>
+	<a href='https://simeon49.github.io/blog/categories'>Categories</a>
+	<a href='https://simeon49.github.io/blog/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        数据库内容复习02-MySql
+                    </h1>
+                    <h2 class="headline">
+                    Feb 28, 2019 00:00
+                    · 1474 words
+                    · 3 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/sql">SQL</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/mysql">MySql</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了[<a href="https://www.jianshu.com/p/dd4fe101cffe">关于索引的-1</a>, <a href="https://blog.csdn.net/gengfu_php/article/details/72614867">关于索引的-2</a>, <a href="https://n.sfs.tw/content/index/11465?noframe=true">全文检索</a>, <a href="https://segmentfault.com/q/1010000005715926">全文搜索无结果原因</a>]</p>
+
+<h3 id="索引">索引</h3>
+
+<p>索引是用来快速的寻找具有特定值的记录, 提高检索效率, 但同时需要额外的空间存储这些索引, 并在进行插入,修改和删除操作时需要对索引进行维护.</p>
+
+<h4 id="普通索引-index">普通索引(Index):</h4>
+
+<p>普通索引的唯一作用是: 提高数据检索效率.</p>
+
+<p><strong>创建</strong></p>
+
+<pre><code class="language-SQL">-- 方法一:
+CREATE TABLE `table-name` (
+    -- ...
+    `column` VARCHAR(100),
+    -- ...
+    KEY `index-name` (`column`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 方法二:
+ALTER TABLE `table-name` ADD CONSTRAINT `index-name` INDEX `column`;
+
+-- 联合索引:
+ALTER TABLE `table-name` ADD CONSTRAINT `index-name` INDEX (`column-1`, `column-2`, `column-3`);
+</code></pre>
+
+<p><strong>删除</strong></p>
+
+<pre><code class="language-SQL">ALTER TABLE `table-name` DROP INDEX `index-name`;
+</code></pre>
+
+<blockquote>
+<p><code>使用建议:</code><br>
+应该只对那些经常出现在查询条件(WHERE column=)或者排序条件(ORDERBY column) 中对应的column建立索引</p>
+</blockquote>
+
+<h4 id="唯一索引-unique">唯一索引(Unique):</h4>
+
+<p>唯一索引属于普通索引, 如果确定某个数据列只包含彼此不同的值, 就应该把对应的column设置为唯一索引</p>
+
+<p><strong>创建</strong></p>
+
+<pre><code class="language-SQL">-- 方法一:
+CREATE TABLE `table-name` (
+    -- ...
+    `column` VARCHAR(100),
+    -- ...
+    UNIQUE KEY `index-name` (`column`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 方法二:
+ALTER TABLE `table-name` ADD CONSTRAINT `index-name` UNIQUE `column`;
+
+-- 联合索引:
+ALTER TABLE `table-name` ADD CONSTRAINT `index-name` UNIQUE (`column-1`, `column-2`, `column-3`);
+</code></pre>
+
+<p><strong>删除</strong></p>
+
+<pre><code class="language-SQL">ALTER TABLE `table-name` DROP INDEX `index-name`;
+</code></pre>
+
+<h4 id="主键-primary-key">主键(Primary Key):</h4>
+
+<p>主键用于唯一鉴定唯一的一行记录, 区别于唯一索引:
+- 不能有NULL(空)值
+- 一张表最多只能有一个主键, 但可以很多个索引
+- 主键可以作为外键, 唯一索引不可以</p>
+
+<p><strong>创建</strong></p>
+
+<pre><code class="language-SQL">-- 方法一:
+CREATE TABLE `table-name` (
+    -- ...
+    `column` INT NOT NULL,
+    -- ...
+    PRIMARY KEY (`column`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 方法二:
+ALTER TABLE `table-name` ADD CONSTRAINT `pk-name` PRIMARY KEY (`column`);
+
+-- 多列做为主键:
+ALTER TABLE `table-name` ADD CONSTRAINT `pk-name` PRIMARY KEY(`column-1`, `column-2`, `column-3`);
+</code></pre>
+
+<p><strong>删除</strong></p>
+
+<pre><code class="language-SQL">ALTER TABLE `table-name` DROP PRIMARY KEY;
+</code></pre>
+
+<h3 id="全文索引-fulltext">全文索引(FullText)</h3>
+
+<p>还记得 SELECT * FROM <code>table-name</code> where <code>title</code> like &lsquo;%中文%&rsquo; 吗?
+全文索引比它效率高的多.</p>
+
+<p><strong>创建</strong></p>
+
+<pre><code class="language-SQL">-- 方法一:
+CREATE TABLE `table-name` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `title` varchar(200) DEFAULT NULL,
+    `content` text,
+    PRIMARY KEY (`id`),
+    FULLTEXT KEY `ft-name` (`title`, `content`) with parser ngram
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 方法二: 注意: ngram 是支持中文的分词器, 如果不设置这个分词器, 检索时将按照英文的分词习惯分词(中文将检索不到结果)
+ALTER TABLE `table-name` ADD FULLTEXT `ft-name` (`title`, `content`) with parser ngram;
+</code></pre>
+
+<p><strong>使用</strong></p>
+
+<pre><code class="language-SQL">-- 先插入几条数据
+insert into `table-name` (title, content) values('英文索引', '分词，全文索引以词为基础的，MySQL默认的分词是所有非字母和数字的特殊符号都是分词符)');
+insert into `table-name` (title, content) values('中文索引', '分词，全文索引以词为基础的，MySQL默认的分词是所有非字母和数字的特殊符号都是分词符)');
+insert into `table-name` (title, content) values('日文索引', '分词，全文索引以词为基础的，MySQL默认的分词是所有非字母和数字的特殊符号都是分词符)');
+
+SELECT * FROM `table-name` WHERE `title` LIKE '%索引%';
+-- 检索出3条
+
+-- 注意MATCH里的字段必须与&quot;FULLTEXT KEY `ft-name` (`title`, `content`)&quot;中的一样, 不然会报错 (1191, &quot;Can't find FULLTEXT index matching the column list&quot;)
+SELECT title FROM `table-name` WHERE MATCH(`title`, `content`) AGAINST('索引');
+-- 检索出3条
+
+SELECT title FROM `table-name` WHERE MATCH(`title`, `content`) AGAINST('索');
+-- 检索出0条; 因为检索是按分词的方式检索 &quot;索引&quot;是一个词, &quot;所&quot;不是
+
+SELECT title FROM `table-name` WHERE MATCH(`title`, `content`) AGAINST('索' IN BOOLEAN MODE);
+</code></pre>
+
+<p><strong>使用Boolean mode 来检索</strong></p>
+
+<table>
+<thead>
+<tr>
+<th align="center">关键字</th>
+<th align="center">说明</th>
+<th align="center">实例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">+word</td>
+<td align="center">记录中一定要有这个词</td>
+<td align="center">AGAINST(&lsquo;+中文 +分词&rsquo; IN BOOLEAN MODE)</td>
+</tr>
+
+<tr>
+<td align="center">-word</td>
+<td align="center">记录中一定不要有这个词</td>
+<td align="center">AGAINST(&lsquo;-中文 +分词&rsquo; IN BOOLEAN MODE)</td>
+</tr>
+
+<tr>
+<td align="center">?word</td>
+<td align="center">记录中不应该有这个词, 但有可以有, 降低该词的权重</td>
+<td align="center">AGAINST(&lsquo;?中文 +分词&rsquo; IN BOOLEAN MODE)</td>
+</tr>
+
+<tr>
+<td align="center">key*</td>
+<td align="center">记录中以key开头的词</td>
+<td align="center">AGAINST(&lsquo;?中文 +分词&rsquo; IN BOOLEAN MODE)</td>
+</tr>
+
+<tr>
+<td align="center">()</td>
+<td align="center">分组: 一定有&rdquo;分词&rdquo; 以及(&ldquo;中文&rdquo; 或 &ldquo;英文&rdquo;)</td>
+<td align="center">AGAINST(&lsquo;+分词 +(中文 英文)&rsquo; IN BOOLEAN MODE)</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>删除</strong></p>
+
+<pre><code class="language-SQL">ALTER TABLE `table-name` DROP INDEX `ft-name`;
+</code></pre>
+
+<blockquote>
+<p><code>建议</code>:<br>
+如果对此检索有更高的要求, 建议使用全文搜索引擎比如: <a href="http://sphinxsearch.com/">sphinx</a></p>
+</blockquote>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'simeon49';
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+        
+        var disquesLoaded = false;
+        dsq.onload = function () {
+            disquesLoaded = true;
+        };
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+        setTimeout(() => {
+            if (!disquesLoaded) {
+                alert('加载disques 失败!');
+            }
+        }, 3000);
+
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+                <ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/blog/posts/2019-02-26-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A001-%E6%A6%82%E8%BF%B0/">数据库内容复习01-概述<aside class="dates">Feb 26 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-02-12-%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E8%AF%81gplbsdmitmozillaapache%E5%92%8Clgpl%E7%9A%84%E5%8C%BA%E5%88%AB/">开源许可证GPL、BSD、MIT、Mozilla、Apache和LGPL的区别<aside class="dates">Feb 12 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-26-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E5%8E%9F%E5%9E%8B/">优美代码-原型<aside class="dates">Jan 26 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-25-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E6%AD%A3%E4%BA%A4/">优美代码-正交<aside class="dates">Jan 25 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-24-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E4%BD%BF%E7%94%A8%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">优美代码-使用冗余字段处理问题<aside class="dates">Jan 24 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-23-%E4%BA%A4%E6%B5%81%E6%8A%80%E5%B7%A7/">交流技巧<aside class="dates">Jan 23 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-22-%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88/">从输入url到页面展示到底发生了什么<aside class="dates">Jan 22 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-16-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/">浏览器缓存<aside class="dates">Jan 16 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-15-%E4%B8%80%E9%81%93%E7%A5%9E%E5%A5%87%E7%9A%84%E5%89%8D%E7%AB%AF%E9%99%84%E5%8A%A0%E9%A2%98/">一道神奇的前端附加题<aside class="dates">Jan 15 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-14-%E8%99%9A%E6%8B%9Fdom/">虚拟DOM<aside class="dates">Jan 14 2019</aside></a>
+        </li>
+    
+</ul>
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/simeon49">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2019 <i class="fa fa-heart" aria-hidden="true"></i> Simeon
+    
+    </p>
+    
+</footer>
+
+        </section>
+
+        <script src="https://simeon49.github.io/blog/js/jquery-3.3.1.min.js"></script>
+<script src="https://simeon49.github.io/blog/js/main.js"></script>
+<script src="https://simeon49.github.io/blog/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+<script>
+var baiduAnalytics = '74fafdde017951e1df78c761e7c017bc';
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?" + baiduAnalytics;
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+    </body>
+</html>
