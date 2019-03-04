@@ -47,7 +47,7 @@
                     </h1>
                     <h2 class="headline">
                     Mar 4, 2019 00:00
-                    · 185 words
+                    · 393 words
                     · 1 minute read
                       <span class="tags">
                       
@@ -70,31 +70,75 @@
                 <section id="post-body">
                     
 
-<p>复习数据库方面的内容, 以下为笔记内容, 参考了&hellip;</p>
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了&hellip;(未完成&hellip;)</p>
 
-<h3 id="索引">索引</h3>
+<h3 id="条件查询">条件查询</h3>
 
-<p>索引是用来快速的寻找具有特定值的记录, 提高检索效率, 但同时需要额外的空间存储这些索引, 并在进行插入,修改和删除操作时需要对索引进行维护.</p>
+<pre><code class="language-SQL">SELECT * FROM &lt;表名&gt; WHERE &lt;条件表达式&gt;
+</code></pre>
 
-<h4 id="普通索引-index">普通索引(Index):</h4>
+<p>常用的条件表达式:</p>
 
-<p>普通索引的唯一作用是: 提高数据检索效率.</p>
+<table>
+<thead>
+<tr>
+<th align="center">条件</th>
+<th align="center">说明</th>
+<th align="center">表达式举例</th>
+</tr>
+</thead>
 
-<p><strong>创建</strong></p>
+<tbody>
+<tr>
+<td align="center">=</td>
+<td align="center">判断相等</td>
+<td align="center">score = 80 name = &lsquo;abc&rsquo;    字符串需要用单引号括起来</td>
+</tr>
 
-<pre><code class="language-SQL">-- 方法一:
-CREATE TABLE `table-name` (
-    -- ...
-    `column` VARCHAR(100),
-    -- ...
-    KEY `index-name` (`column`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+<tr>
+<td align="center">&gt;</td>
+<td align="center">判断大于</td>
+<td align="center">score &gt; 80  name &gt; &lsquo;abc&rsquo;    字符串比较根据ASCII码，中文字符比较根据数据库设置</td>
+</tr>
 
--- 方法二:
-ALTER TABLE `table-name` ADD CONSTRAINT `index-name` INDEX `column`;
+<tr>
+<td align="center">&gt;=</td>
+<td align="center">判断大于或相等</td>
+<td align="center">score &gt;= 80     name &gt;= &lsquo;abc&rsquo;</td>
+</tr>
 
--- 联合索引:
-ALTER TABLE `table-name` ADD CONSTRAINT `index-name` INDEX (`column-1`, `column-2`, `column-3`);
+<tr>
+<td align="center">&lt;</td>
+<td align="center">判断小于</td>
+<td align="center">score &lt; 80  name &lt;= &lsquo;abc&rsquo;</td>
+</tr>
+
+<tr>
+<td align="center">&lt;=</td>
+<td align="center">判断小于或相等</td>
+<td align="center">score &lt;= 80     name &lt;= &lsquo;abc&rsquo;</td>
+</tr>
+
+<tr>
+<td align="center">&lt;&gt; 也可以用 !=</td>
+<td align="center">判断不相等(!= 在MySQL中可以使用 不过不是标准的SQL)</td>
+<td align="center">score &lt;&gt; 80     name &lt;&gt; &lsquo;abc&rsquo;</td>
+</tr>
+
+<tr>
+<td align="center">LIKE</td>
+<td align="center">判断相似</td>
+<td align="center">name LIKE &lsquo;ab%&rsquo;     name LIKE &lsquo;%bc%&rsquo;    %表示任意字符，例如&rsquo;ab%&lsquo;将匹配&rsquo;ab&rsquo;，&rsquo;abc&rsquo;，&rsquo;abcd&rsquo;</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="实例">实例:</h4>
+
+<pre><code class="language-SQL">-- 查询分数在60分(含)～90分(含)之间的学生可以使用的WHERE语句：
+SELECT * FROM students WHERE score &gt;= 60 OR score &lt;= 90;
+-- 或者
+SELECT * FROM students WHERE score BETWEEN 60 and 90;
 </code></pre>
 
                 </section>
