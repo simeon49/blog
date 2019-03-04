@@ -47,7 +47,7 @@
                     </h1>
                     <h2 class="headline">
                     Mar 4, 2019 00:00
-                    · 2012 words
+                    · 2100 words
                     · 5 minute read
                       <span class="tags">
                       
@@ -70,7 +70,7 @@
                 <section id="post-body">
                     
 
-<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://www.liaoxuefeng.com/wiki/001508284671805d39d23243d884b8b99f440bfae87b0f4000/00150916693927731d0ce561dfc4c6f8239c1951f0fd610000">廖雪峰</a>&hellip;(未完成&hellip;)</p>
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://www.liaoxuefeng.com/wiki/001508284671805d39d23243d884b8b99f440bfae87b0f4000/00150916693927731d0ce561dfc4c6f8239c1951f0fd610000">廖雪峰</a> <a href="https://blog.csdn.net/JesseYoung/article/details/40108781">子查询</a> <a href="https://www.jianshu.com/p/08617ba12377">子查询</a> &hellip;</p>
 
 <h3 id="预备">预备</h3>
 
@@ -396,7 +396,26 @@ select c.name, count(s.id) as total from classes as c left join students as s on
 | 四班 | 0     |
 +------+-------+
 
+</code></pre>
 
+<h4 id="子查询">子查询</h4>
+
+<pre><code class="language-SQL">-- 获取 与 &quot;Emma&quot; 同分数的学生
+select id, name from students where score = (select score from students where name=&quot;Emma&quot;) and name&lt;&gt;&quot;Emma&quot;;
++----+------+
+| id | name |
++----+------+
+| 10 | Gail |
++----+------+
+
+-- exists 查询
+-- 统计哪个班至少有一个不及格(&lt;60)的学生
+select c.name from classes as c where exists (select * from students as s where s.score &lt; 60 and c.id=s.class_id);
++------+
+| name |
++------+
+| 三班 |
++------+
 </code></pre>
 
                 </section>
@@ -442,6 +461,10 @@ select c.name, count(s.id) as total from classes as c left join students as s on
     
     
         <li>
+            <a href="/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/">数据库内容复习03-MySql的查询优化<aside class="dates">Mar 4 2019</aside></a>
+        </li>
+    
+        <li>
             <a href="/blog/posts/2019-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/">数据库内容复习02-MySql的索引们<aside class="dates">Feb 28 2019</aside></a>
         </li>
     
@@ -475,10 +498,6 @@ select c.name, count(s.id) as total from classes as c left join students as s on
     
         <li>
             <a href="/blog/posts/2019-01-16-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/">浏览器缓存<aside class="dates">Jan 16 2019</aside></a>
-        </li>
-    
-        <li>
-            <a href="/blog/posts/2019-01-15-%E4%B8%80%E9%81%93%E7%A5%9E%E5%A5%87%E7%9A%84%E5%89%8D%E7%AB%AF%E9%99%84%E5%8A%A0%E9%A2%98/">一道神奇的前端附加题<aside class="dates">Jan 15 2019</aside></a>
         </li>
     
 </ul>
