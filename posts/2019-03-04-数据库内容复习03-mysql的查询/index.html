@@ -8,7 +8,7 @@
 		<meta name="author" content="Simeon">
 		<meta name="description" content="Simeon 个人微博">
 		<meta name="generator" content="Hugo 0.52" />
-		<title>优美代码-使用冗余字段处理问题 &middot; Simeon&#39;s blog</title>
+		<title>数据库内容复习03-MySql的查询 &middot; Simeon&#39;s blog</title>
 		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
@@ -43,17 +43,23 @@
             <article>
                 <header>
                     <h1>
-                        优美代码-使用冗余字段处理问题
+                        数据库内容复习03-MySql的查询
                     </h1>
                     <h2 class="headline">
-                    Jan 24, 2019 00:00
-                    · 1162 words
-                    · 3 minute read
+                    Mar 4, 2019 00:00
+                    · 185 words
+                    · 1 minute read
                       <span class="tags">
                       
                       
                           
-                              <a href="https://simeon49.github.io/blog/tags/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1">程序设计</a>
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/sql">SQL</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/mysql">MySql</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2">数据库查询</a>
                           
                       
                       
@@ -64,78 +70,32 @@
                 <section id="post-body">
                     
 
-<p>最近在读 Andrew Hunt 与 David Thomas 的经典著作 &lt;&lt;程序员修炼之道&gt;&gt; 其中有一节在阐述程序设计中&rdquo;知识&rdquo;重复的危害(这里的知识是广义的, 对程序来说就是一些功能的代码), 文中提到的内容和我之前重构一个项目时遇到的问题有相似之处, 在此记录下来.<br></p>
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了&hellip;</p>
 
-<p>项目是一个为了促进用户消费的和粘稠度优惠券系统(商家/平台策划活动, 用户参与活动后获得优惠券并在以后的消费中使用优惠券&hellip;), 这个系统中有一个表是用来保存活动计划, 简化后的结构如下:</p>
+<h3 id="索引">索引</h3>
 
-<pre><code class="language-python">class ActivityPlan(BaseModel):
-    name, # 活动计划名称
+<p>索引是用来快速的寻找具有特定值的记录, 提高检索效率, 但同时需要额外的空间存储这些索引, 并在进行插入,修改和删除操作时需要对索引进行维护.</p>
 
-    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
-    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
-    endDate,        # 活动结束时间
-    ....
+<h4 id="普通索引-index">普通索引(Index):</h4>
+
+<p>普通索引的唯一作用是: 提高数据检索效率.</p>
+
+<p><strong>创建</strong></p>
+
+<pre><code class="language-SQL">-- 方法一:
+CREATE TABLE `table-name` (
+    -- ...
+    `column` VARCHAR(100),
+    -- ...
+    KEY `index-name` (`column`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 方法二:
+ALTER TABLE `table-name` ADD CONSTRAINT `index-name` INDEX `column`;
+
+-- 联合索引:
+ALTER TABLE `table-name` ADD CONSTRAINT `index-name` INDEX (`column-1`, `column-2`, `column-3`);
 </code></pre>
-
-<p>为了方便运营直观的了解活动计划的状态, 在后台管理的界面要展示每一个活动的状态[&lsquo;待审批&rsquo;, &lsquo;审批未通过&rsquo;, &lsquo;等待发布&rsquo;, &lsquo;活动进行中&rsquo;, &lsquo;活动已结束&rsquo;&hellip;.]<br></p>
-
-<p>前端拿到活动计划后需要按照与后端的约定判断逐次判断&rdquo;approve&rdquo;, &ldquo;isPublish&rdquo;, &ldquo;endDate&rdquo;&hellip; 这些字段的值, 最后计算出最终的状态, 如果一但业务有新的变化, 无疑前后端都要重新制定新的规则并更改对应的代码, 这其实就是后端的&rdquo;知识&rdquo;在前端的重复<br></p>
-
-<h4 id="一次优化">一次优化</h4>
-
-<pre><code class="language-python">class ActivityPlan(BaseModel):
-    name, # 活动计划名称
-
-    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
-    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
-    endDate,        # 活动结束时间
-    ....
-
-    state,          # 状态
-</code></pre>
-
-<p>前端不再需要了解后端如何判断活动计划的状态, 只需要知道每一个state对应的状态是什么即可, 但对于后端来说又有了新的问题&mdash;我们需要在过去代码中所有更改&rdquo;approve&rdquo;, &ldquo;isPublish&rdquo;&hellip; 的地方添加state字段的更新, 而且如果活动已经进入发布状态, 还需要在每次返回前端前对当前时间与endDate进行比较以便确认活动是否已经结束.</p>
-
-<h4 id="再一次优化">再一次优化</h4>
-
-<pre><code class="language-python">class ActivityPlan(BaseModel):
-    name, # 活动计划名称
-
-    approve,        # 运营总监是否同意发布这个活动 (0: 等待审批 1: 通过, -1: 未通过)
-    isPublished,    # 活动是否已发布 (1: 是, 0: 未发布)
-    endDate,        # 活动结束时间
-    ....
-
-    @property
-    def state(self):          # 状态
-        if self.approve == 0:
-            return 1001     # 待审批
-        elif self.approve == -2:
-            return 1002     # 审批未通过
-        ....
-</code></pre>
-
-<p>后端只在类ActivityPlan中处理state, 而无需再其它地方处理</p>
-
-<h3 id="总结">总结</h3>
-
-<p><strong>原始代码</strong></p>
-
-<blockquote>
-<p>后端代码是简洁的, 但存在前后端&rdquo;知识&rdquo;(状态的判断逻辑)上的重复</p>
-</blockquote>
-
-<p><strong>第一次的改进</strong></p>
-
-<blockquote>
-<p>解决了前后端&rdquo;知识&rdquo;上的重复问题, 但使得后端出现状态上的重复(可以认为 state 是其它几个状态字段的冗余(由其它字段计算得来)), 同时为了保持state的正确性, 需要在代码的许多地方维护state</p>
-</blockquote>
-
-<p><strong>的二次的改进</strong></p>
-
-<blockquote>
-<p>将维护state的操作局部化到类的方法中, 而不暴露到整个后端代码中</p>
-</blockquote>
 
                 </section>
             </article>
@@ -180,10 +140,6 @@
     
     
         <li>
-            <a href="/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/">数据库内容复习03-MySql的查询<aside class="dates">Mar 4 2019</aside></a>
-        </li>
-    
-        <li>
             <a href="/blog/posts/2019-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/">数据库内容复习02-MySql的索引们<aside class="dates">Feb 28 2019</aside></a>
         </li>
     
@@ -201,6 +157,10 @@
     
         <li>
             <a href="/blog/posts/2019-01-25-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E6%AD%A3%E4%BA%A4/">优美代码-正交<aside class="dates">Jan 25 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-24-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E4%BD%BF%E7%94%A8%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">优美代码-使用冗余字段处理问题<aside class="dates">Jan 24 2019</aside></a>
         </li>
     
         <li>

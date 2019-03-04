@@ -6,17 +6,26 @@
     <description>Recent content in 数据库 on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
-    <lastBuildDate>Thu, 28 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 04 Mar 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>数据库内容复习03-MySql的查询</title>
+      <link>https://simeon49.github.io/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/</link>
+      <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/</guid>
+      <description>复习数据库方面的内容, 以下为笔记内容, 参考了&amp;hellip; 索引 索引是用来快速的寻找具有特定值的记录, 提高检索效率, 但同时需要额外的空间存储</description>
+    </item>
+    
+    <item>
       <title>数据库内容复习02-MySql的索引们</title>
-      <link>https://simeon49.github.io/blog/posts/2020-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/</link>
+      <link>https://simeon49.github.io/blog/posts/2019-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/</link>
       <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://simeon49.github.io/blog/posts/2020-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/</guid>
+      <guid>https://simeon49.github.io/blog/posts/2019-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/</guid>
       <description>复习数据库方面的内容, 以下为笔记内容, 参考了[关于索引的-1, 关于索引的-2, 全文检索, 全文搜索无结果原因], 外键&amp;hellip; 索引 索引是</description>
     </item>
     
