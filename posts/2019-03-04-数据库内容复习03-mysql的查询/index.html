@@ -47,8 +47,8 @@
                     </h1>
                     <h2 class="headline">
                     Mar 4, 2019 00:00
-                    · 393 words
-                    · 1 minute read
+                    · 853 words
+                    · 2 minute read
                       <span class="tags">
                       
                       
@@ -133,12 +133,90 @@
 </tbody>
 </table>
 
-<h4 id="实例">实例:</h4>
+<h4 id="基本实例">基本实例:</h4>
 
 <pre><code class="language-SQL">-- 查询分数在60分(含)～90分(含)之间的学生可以使用的WHERE语句：
 SELECT * FROM students WHERE score &gt;= 60 OR score &lt;= 90;
 -- 或者
 SELECT * FROM students WHERE score BETWEEN 60 and 90;
+
+-- 指定查询列
+SELECT id, name, score from students WHERE SCORE &lt; 60;
+
+-- 排序
+select * from students ORDER BY score;  -- 升序 &quot;ASC&quot;
+select * from students ORDER BY score DESC; -- 倒序
+select * from students ORDER BY score DESC, gender; -- 先按score倒序排, 如果有相同的score 按 gender 升序排
+
+-- 分页
+select * from students ORDER BY score LIMIT 10 OFFSET 0;  -- 每页10条数据, 查询第一页
+select * from students ORDER BY score LIMIT 10 OFFSET 10;  -- 每页10条数据, 查询第二页
+select * from students ORDER BY score LIMIT 10 OFFSET 20;  -- 每页10条数据, 查询第三页
+-- 备注: 在MySQL中，LIMIT 15 OFFSET 30还可以简写成LIMIT 30, 15
+</code></pre>
+
+<h4 id="聚合查询">聚合查询</h4>
+
+<p>聚合函数:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">函数</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">SUM</td>
+<td align="center">计算某一列的合计值，该列必须为数值类型</td>
+</tr>
+
+<tr>
+<td align="center">AVG</td>
+<td align="center">计算某一列的平均值，该列必须为数值类型</td>
+</tr>
+
+<tr>
+<td align="center">MAX</td>
+<td align="center">计算某一列的最大值 (如果是字符类型，MAX()和MIN()会返回排序最后和排序最前的字符。)</td>
+</tr>
+
+<tr>
+<td align="center">MIN</td>
+<td align="center">计算某一列的最小值 (如果是字符类型，MAX()和MIN()会返回排序最后和排序最前的字符。)</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-SQL">-- 查询students表一共有多少条记录为例
+select COUNT(*) from students;
+-- +----------+
+-- | count(*) |
+-- +----------+
+-- | 3        |
+-- +----------+
+
+-- 使用别名
+select COUNT(*) as total from students;
+-- +-------+
+-- | total |
+-- +-------+
+-- | 3     |
+-- +-------+
+
+-- 计算平均值
+select AVG(score) as average from students;
+
+-- 获得总页数(每页10条数据)
+select CEILING(COUNT(*)/10) from students;
+</code></pre>
+
+<h4 id="分组查询">分组查询</h4>
+
+<pre><code class="language-SQL">-- 统计每一班学生的总数
+SELECT class_id, COUNT(*) as total FROM students GROUP BY class_id;
 </code></pre>
 
                 </section>
