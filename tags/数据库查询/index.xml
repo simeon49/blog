@@ -17,7 +17,7 @@
       <pubDate>Mon, 04 Mar 2019 00:00:00 +0000</pubDate>
       
       <guid>https://simeon49.github.io/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/</guid>
-      <description>复习数据库方面的内容, 以下为笔记内容, 参考了&amp;hellip;(未完成&amp;hellip;) 条件查询 SELECT * FROM &amp;lt;表名&amp;gt; WHERE &amp;lt;条件表达式</description>
+      <description>复习数据库方面的内容, 以下为笔记内容, 参考了&amp;hellip;(未完成&amp;hellip;) 预备 CREATE TABLE `classes` ( `id` INT(11) NOT NULL AUTO_INCREMENT, `name` VARCHAR(100) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8; CREATE TABLE `students` ( `id`</description>
     </item>
     
   </channel>
