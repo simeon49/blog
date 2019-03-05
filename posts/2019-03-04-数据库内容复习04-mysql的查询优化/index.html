@@ -47,7 +47,7 @@
                     </h1>
                     <h2 class="headline">
                     Mar 4, 2019 00:00
-                    · 2348 words
+                    · 2383 words
                     · 5 minute read
                       <span class="tags">
                       
@@ -70,11 +70,13 @@
                 <section id="post-body">
                     
 
-<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://codingstandards.iteye.com/blog/1344833">优化查询文章</a>&hellip;</p>
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://codingstandards.iteye.com/blog/1344833">优化查询文章</a> <a href="https://tech.meituan.com/2014/06/30/mysql-index.html">美团优化实例</a> <a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html">MySQL索引背后的数据结构及算法原理</a> <a href="https://coolshell.cn/articles/1846.html">MySQL性能优化的最佳20+条经验</a> <a href="https://dbaplus.cn/news-155-1531-1.html">万字总结：学习MySQL优化原理，这一篇就够了！</a>&hellip;</p>
+
+<h2 id="这部分东西太多了-打算下次重新写一下">这部分东西太多了, 打算下次重新写一下</h2>
 
 <h3 id="预备">预备</h3>
 
-<p>参考我上一篇文章<a href="https://simeon49.github.io/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/">MySQL的查询</a>中的&rdquo;预备&rdquo; <a href="https://coolshell.cn/articles/1846.html">MySQL性能优化的最佳20+条经验</a> <a href="https://dbaplus.cn/news-155-1531-1.html">万字总结：学习MySQL优化原理，这一篇就够了！</a>&hellip;</p>
+<p>参考我上一篇文章<a href="https://simeon49.github.io/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/">MySQL的查询</a>中的&rdquo;预备&rdquo;</p>
 
 <h3 id="性能分析器-explain-desc">性能分析器(Explain/Desc)</h3>
 
