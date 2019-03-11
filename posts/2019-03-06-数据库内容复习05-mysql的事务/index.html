@@ -47,8 +47,8 @@
                     </h1>
                     <h2 class="headline">
                     Mar 6, 2019 00:00
-                    · 1297 words
-                    · 3 minute read
+                    · 2301 words
+                    · 5 minute read
                       <span class="tags">
                       
                       
@@ -70,7 +70,11 @@
                 <section id="post-body">
                     
 
-<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://www.liaoxuefeng.com/wiki/001508284671805d39d23243d884b8b99f440bfae87b0f4000/0015091672511496641de7eeea04f67bf55ccf22e35e428000">廖雪峰的MySQL教程</a>, <a href="https://www.jianshu.com/p/bcc614524024">理解事务 - MySQL 事务处理机制</a>, <a href="https://draveness.me/mysql-transaction">『浅入深出』MySQL 中事务的实现</a></p>
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了:
+<a href="https://www.liaoxuefeng.com/wiki/001508284671805d39d23243d884b8b99f440bfae87b0f4000/0015091672511496641de7eeea04f67bf55ccf22e35e428000">廖雪峰的MySQL教程</a><br>
+<a href="https://www.jianshu.com/p/bcc614524024">理解事务 - MySQL 事务处理机制</a><br>
+<a href="https://draveness.me/mysql-transaction">『浅入深出』MySQL 中事务的实现</a><br>
+<a href="https://draveness.me/mysql-innodb">『浅入浅出』MySQL 和 InnoDB</a><br></p>
 
 <h2 id="事务-database-transaction">事务(Database Transaction)</h2>
 
@@ -95,46 +99,70 @@ ROLLBACK;
 
 <ul>
 <li><code>原子性(Atomicy)</code>: 事务所包含的操作要么完全成功, 要么完全失败回滚</li>
-<li><code>一致性(Consistent)</code>: 事务完成后, 所有数据的状态都是一致的, 比如: A转账B 100, A账户只要减了100, B账户必定加了100</li>
+<li><code>一致性(Consistent)</code>: 事务完成后, 所有数据的状态都是一致的. 它的第一层意思就是对于数据完整性的约束，包括主键约束、引用约束以及一些约束检查等等，在事务的执行的前后以及过程中不会违背对数据完整性的约束，所有对数据库写入的操作都应该是合法的，并不能产生不合法的数据状态. 第二层是业务上的完整性 比如: A转账B 100, A账户只要减了100, B账户必定加了100</li>
 <li><code>隔离性(Isolation)</code>: 如果有多个事务并发执行, 每个事务做出的修改必须与其它事务隔离</li>
 <li><code>持久性(Duration)</code>: 事务完成后, 对数据的修改必须持久化存储</li>
 </ul>
 
 <hr />
 
-<h3 id="回滚实现原理">回滚实现原理</h3>
+<h3 id="原子性-回滚实现原理">原子性 - 回滚实现原理</h3>
 
-<p>当事务发生异常就要对已执行的操作进行回滚, mysql 通过回滚日志(undo log) 实现回滚这一操作, 在事务中的每一个修改操作, 都会先被记录到回滚日志中, 然后在对数据库进行对应的写入操作<br></p>
+<p>当事务发生异常就要对已执行的操作进行回滚, mysql 通过回滚日志(undo log) 实现回滚操作, 在事务中的每一个修改操作, 都会先被记录到回滚日志中, 然后在内存中对数据进行对应的更新操作, 最后在 commit时将回滚日志,内存中的数据依次写回到磁盘中<br>
+回滚时只要从回滚日志中依次倒序读入操作记录并对数据库执行对应反向操作即可<br></p>
 
-<blockquote>
-<p>(修改操作) -&gt; 记录Undo Log -&gt; 执行数据库更新操作</p>
-</blockquote>
+<p><img src="../../pic/2019-03-06/回滚日志.jpeg" alt="回滚日志" /></p>
 
-<p>回滚时只要从回滚日志中依次倒序读入操作记录并对数据库执行对应反向操作即可</p>
+<h3 id="持久性-异常时保持数据持久性原理">持久性 - 异常时保持数据持久性原理:</h3>
 
-<blockquote>
-<p>读取 Undo log -&gt; 反向操作更新数据库</p>
-</blockquote>
+<p>防止在发生故障的时间点，尚有脏页未写入磁盘，在重启mysql服务的时候，根据redo log进行重做，从而达到事务的持久性这一特性。<br></p>
 
-<h3 id="并发的事务执行">并发的事务执行:</h3>
+<p>与原子性一样，事务的持久性也是通过日志来实现的，MySQL 使用重做日志（redo log）实现事务的持久性，重做日志由两部分组成，一是内存中的重做日志缓冲区，因为重做日志缓冲区在内存中，所以它是易失的，另一个就是在磁盘上的重做日志文件，它是持久的。<br></p>
+
+<p><img src="../../pic/2019-03-06/重做日志.jpg" alt="回滚日志" /></p>
+
+<p>当我们在一个事务中尝试对数据进行修改时，它会先将数据从磁盘读入内存，并更新内存中缓存的数据，然后生成一条重做日志并写入重做日志缓存，当事务真正提交时，MySQL 会将重做日志缓存中的内容刷新到重做日志文件，再将内存中的数据更新到磁盘上，图中的第 4、5 步就是在事务提交时执行的。<br></p>
+
+<p>在 InnoDB 中，重做日志都是以 512 字节的块的形式进行存储的，同时因为块的大小与磁盘扇区大小相同，所以重做日志的写入可以保证原子性，不会由于机器断电导致重做日志仅写入一半并留下脏数据。<br></p>
+
+<p>除了所有对数据库的修改会产生重做日志，因为回滚日志也是需要持久存储的，它们也会创建对应的重做日志，在发生错误后，数据库重启时会从重做日志中找出未被更新到数据库磁盘中的日志重新执行以满足事务的持久性。<br></p>
+
+<h3 id="隔离性-并发的事务执行">隔离性 - 并发的事务执行:</h3>
 
 <p>在实际中经常会发生多个事务同时执行, 当多个事务依赖于多个相同记录时, 需要对事务做隔离处理</p>
 
 <p><strong>如果没有隔离会出现的问题</strong>:</p>
 
 <ol>
-<li><p>脏读（Dirty Read）: 一个事务处理过程里读取了另一个未提交的事务中的数据</p></li>
-
-<li><p>不可重复读（NonRepeatable Read）: 对于数据库中的某个数据，一个事务范围内多次查询却返回了不同的数据值，这是由于在查询的间隔期间，另外一个事务修改并提交了该数据</p></li>
+<li>脏读（Dirty Read）: 一个事务处理过程里读取了另一个未提交的事务中的数据<br></li>
 </ol>
 
 <blockquote>
-<p>不可重复读和脏读的区别是，脏读是某一事务读取了另一个事务未提交的脏数据，而不可重复读则是读取了前一事务提交的数据。在某些情况下，不可重复读并不是问题，比如我们多次查询某个数据当然以最后查询得到的结果为主。但在另一些情况下就有可能发生问题，例如对于同一个数据A和B依次查询就可能不同，A和B就可能打起来了……</p>
+<p>当事务的隔离级别为 READ UNCOMMITED 时，我们在 SESSION 2 中插入的未提交数据在 SESSION 1 中是可以访问的。</p>
 </blockquote>
 
+<p><img src="../../pic/2019-03-06/Read-Uncommited-Dirty-Read.jpg" alt="Read-Uncommited-Dirty-Read" /></p>
+
 <ol>
-<li>幻读（Phantom Read）:在一个事务中读取到了别的事务插入的数据，导致前后不一致</li>
+<li>不可重复读（NonRepeatable Read）: 在一个事务中，同一行记录被访问了两次却得到了不同的结果<br></li>
 </ol>
+
+<blockquote>
+<p>当事务的隔离级别为 READ COMMITED 时，虽然解决了脏读的问题，但是如果在 SESSION 1 先查询了一行数据，在这之后 SESSION 2 中修改了同一行数据并且提交了修改，在这时，如果 SESSION 1 中再次使用相同的查询语句，就会发现两次查询的结果不一样。<br> 不可重复读的原因就是，在 READ COMMITED 的隔离级别下，存储引擎不会在查询记录时添加行锁，锁定 id = 3 这条记录。</p>
+</blockquote>
+
+<p><img src="../../pic/2019-03-06/Read-Commited-Non-Repeatable-Read.jpg" alt="Read-Commited-Non-Repeatable-Read" /></p>
+
+<ol>
+<li>幻读（Phantom Read）:在一个事务中读取到了别的事务插入的数据，导致前后不一致<br></li>
+</ol>
+
+<blockquote>
+<p>重新开启了两个会话 SESSION 1 和 SESSION 2，在 SESSION 1 中我们查询全表的信息，没有得到任何记录；在 SESSION 2 中向表中插入一条数据并提交；由于 REPEATABLE READ 的原因，再次查询全表的数据时，我们获得到的仍然是空集，但是在向表中插入同样的数据却出现了错误。<br>
+这种现象在数据库中就被称作幻读，虽然我们使用查询语句得到了一个空的集合，但是插入数据时却得到了错误，好像之前的查询是幻觉一样。</p>
+</blockquote>
+
+<p><img src="../../pic/2019-03-06/Repeatable-Read-Phantom-Read.jpg" alt="Repeatable-Read-Phantom-Read" /></p>
 
 <blockquote>
 <p>如丙存款100元未提交，这时银行做报表统计account表中所有用户的总额为500元，然后丙提交了，这时银行再统计发现帐户为600元了，造成虚读同样会使银行不知所措，到底以哪个为准。</p>
@@ -187,10 +215,12 @@ ROLLBACK;
 
 <ul>
 <li>Read uncommitted: 使用查询语句不会加锁, 可能会读到未提交的行（Dirty Read)</li>
-<li>Read committed: 只对记录加记录锁, 而不会再记录之间加间隙锁,</li>
+<li>Read committed: 只对记录加记录锁，而不会在记录之间加间隙锁，所以允许新的记录插入到被锁定记录的附近，所以再多次使用查询语句时，可能得到不同的结果（Non-Repeatable Read）；</li>
+<li>REPEATABLE READ：多次读取同一范围的数据会返回第一次查询的快照，不会返回不同的数据行，但是可能发生幻读（Phantom Read）；</li>
+<li>SERIALIZABLE：InnoDB 隐式地将全部的查询语句加上共享锁，解决了幻读的问题；</li>
 </ul>
 
-<h4 id="mysql查询与设置事务隔离级别">MySQL查询与设置事务隔离级别</h4>
+<p><strong>MySQL查询与设置事务隔离级别</strong>:</p>
 
 <pre><code class="language-SQL">-- 查询事务隔离级别
 select @@transaction_isolation;
@@ -204,6 +234,10 @@ select @@global.transaction_isolation;
 -- 设置全局事务隔离级别
 set global transaction isolation level Read uncommitted;
 </code></pre>
+
+<p><strong>实现原理 - 锁</strong>:</p>
+
+<p>参考这篇<a href="https://draveness.me/mysql-innodb#%E9%94%81">文章</a></p>
 
                 </section>
             </article>
