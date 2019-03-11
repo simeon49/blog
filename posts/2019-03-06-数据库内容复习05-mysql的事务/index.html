@@ -47,7 +47,7 @@
                     </h1>
                     <h2 class="headline">
                     Mar 6, 2019 00:00
-                    · 2301 words
+                    · 2327 words
                     · 5 minute read
                       <span class="tags">
                       
@@ -235,6 +235,10 @@ select @@global.transaction_isolation;
 set global transaction isolation level Read uncommitted;
 </code></pre>
 
+<blockquote>
+<p>注意: 设置了 global 隔离级别后需要退出后重新进入才会生效.</p>
+</blockquote>
+
 <p><strong>实现原理 - 锁</strong>:</p>
 
 <p>参考这篇<a href="https://draveness.me/mysql-innodb#%E9%94%81">文章</a></p>
@@ -282,7 +286,7 @@ set global transaction isolation level Read uncommitted;
     
     
         <li>
-            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E5%8E%9F%E7%90%86%E4%BC%98%E5%8C%96/">数据库内容复习06-MySql的原理优化<aside class="dates">Mar 11 2019</aside></a>
+            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96%E5%8E%9F%E7%90%86/">数据库内容复习06-MySql的优化原理<aside class="dates">Mar 11 2019</aside></a>
         </li>
     
         <li>
