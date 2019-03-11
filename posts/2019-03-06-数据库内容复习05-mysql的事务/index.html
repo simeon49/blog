@@ -47,7 +47,7 @@
                     </h1>
                     <h2 class="headline">
                     Mar 6, 2019 00:00
-                    · 1323 words
+                    · 1297 words
                     · 3 minute read
                       <span class="tags">
                       
@@ -140,13 +140,48 @@ ROLLBACK;
 <p>如丙存款100元未提交，这时银行做报表统计account表中所有用户的总额为500元，然后丙提交了，这时银行再统计发现帐户为600元了，造成虚读同样会使银行不知所措，到底以哪个为准。</p>
 </blockquote>
 
-<p><strong>隔离级别</strong>:
-| 隔离级别 |    脏读（Dirty Read）| 不可重复读（Non Repeatable Read）| 幻读（Phantom Read）|
-|:&mdash;&mdash;:|:&mdash;&mdash;:|:&mdash;&mdash;:|:&mdash;&mdash;:|
-| 未提交读(Read uncommitted) | Yes | Yes | Yes |
-| 已提交读(Read committed) | - | Yes | Yes |
-| 可重复读(Repeatable read) | - | - | Yes |
-| 可串行化(Serializable) | - | - | - |</p>
+<p><strong>隔离级别</strong>:</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">隔离级别</th>
+<th align="center">脏读（Dirty Read）</th>
+<th align="center">不可重复读（Non Repeatable Read）</th>
+<th align="center">幻读（Phantom Read）</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">未提交读(Read uncommitted)</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+
+<tr>
+<td align="center">已提交读(Read committed)</td>
+<td align="center">-</td>
+<td align="center">Yes</td>
+<td align="center">Yes</td>
+</tr>
+
+<tr>
+<td align="center">可重复读(Repeatable read)</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">Yes</td>
+</tr>
+
+<tr>
+<td align="center">可串行化(Serializable)</td>
+<td align="center">-</td>
+<td align="center">-</td>
+<td align="center">-</td>
+</tr>
+</tbody>
+</table>
 
 <p>可以看到SQL标准的四个隔离标准, 每一个都比上一个多解决一个问题:</p>
 
@@ -213,7 +248,7 @@ set global transaction isolation level Read uncommitted;
     
     
         <li>
-            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96/">数据库内容复习06-MySql的优化<aside class="dates">Mar 11 2019</aside></a>
+            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E5%8E%9F%E7%90%86%E4%BC%98%E5%8C%96/">数据库内容复习06-MySql的原理优化<aside class="dates">Mar 11 2019</aside></a>
         </li>
     
         <li>

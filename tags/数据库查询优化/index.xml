@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>数据库内容复习06-MySql的优化</title>
-      <link>https://simeon49.github.io/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96/</link>
+      <title>数据库内容复习06-MySql的原理优化</title>
+      <link>https://simeon49.github.io/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E5%8E%9F%E7%90%86%E4%BC%98%E5%8C%96/</link>
       <pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://simeon49.github.io/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96/</guid>
-      <description>复习数据库方面的内容, 以下为笔记内容, 参考了优化查询文章 MySQL索引背后的数据结构及算法原理 MySQL性能优化的最佳20+条经验 万字总结：</description>
+      <guid>https://simeon49.github.io/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E5%8E%9F%E7%90%86%E4%BC%98%E5%8C%96/</guid>
+      <description>复习数据库方面的内容, 以下为笔记内容, 参考了: 优化查询文章 MySQL索引背后的数据结构及算法原理 MySQL性能优化的最佳20+条经验 万字总结</description>
     </item>
     
   </channel>
