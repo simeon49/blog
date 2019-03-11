@@ -8,7 +8,7 @@
 		<meta name="author" content="Simeon">
 		<meta name="description" content="Simeon 个人微博">
 		<meta name="generator" content="Hugo 0.52" />
-		<title>使用web_API处理图片 &middot; Simeon&#39;s blog</title>
+		<title>数据库内容复习04-MySql的其它操作 &middot; Simeon&#39;s blog</title>
 		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
@@ -43,19 +43,23 @@
             <article>
                 <header>
                     <h1>
-                        使用web_API处理图片
+                        数据库内容复习04-MySql的其它操作
                     </h1>
                     <h2 class="headline">
-                    Dec 24, 2018 00:00
-                    · 116 words
-                    · 1 minute read
+                    Mar 5, 2019 00:00
+                    · 983 words
+                    · 2 minute read
                       <span class="tags">
                       
                       
                           
-                              <a href="https://simeon49.github.io/blog/tags/js">js</a>
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
                           
-                              <a href="https://simeon49.github.io/blog/tags/%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86">图片处理</a>
+                              <a href="https://simeon49.github.io/blog/tags/sql">SQL</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/mysql">MySql</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2">数据库查询</a>
                           
                       
                       
@@ -64,14 +68,94 @@
                 </header>
                 
                 <section id="post-body">
-                    <p>国外有一个人写了一篇<a href="https://medium.com/statuscode/filtering-images-using-web-audio-api-276555cca6ad">文章</a>, 大致内容就是通过将图片红,绿,蓝,三色的数据分别进行滤波得到新的图片,在这篇文章中我挑重点解释一下原文作者的意图</p>
+                    
 
-<hr />
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://www.liaoxuefeng.com/wiki/001508284671805d39d23243d884b8b99f440bfae87b0f4000/001509167222820636bbdfd67734468a5615c971e149779000">廖雪峰的MySQL教程</a>, <a href="https://www.cnblogs.com/8765h/archive/2011/11/25/2374167.html">SQL truncate 、delete与drop区别</a>&hellip;</p>
 
-<p>直接看<a href="https://github.com/simeon49/javascript-practices/blob/master/project_05_%E4%BD%BF%E7%94%A8web_API%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/index.html">源码</a> <br>
-直接看<a href="https://simeon49.github.io/javascript-practices/project_05_%E4%BD%BF%E7%94%A8web_API%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/index.html">Demo</a> <strong>请使用FireFox</strong>  <br></p>
+<h3 id="插入-insert">插入(Insert)</h3>
 
-<p>ruanyyifeng写的<a href="http://www.ruanyifeng.com/blog/2017/12/image-and-wave-filters.html">文章</a>很详细,看这篇文章吧</p>
+<pre><code class="language-SQL">-- 单插入
+INSERT INTO &lt;表名&gt; (字段1, 字段2, ...) VALUES (值1, 值2, ...);
+
+-- 多插入
+INSERT INTO &lt;表名&gt; (字段1, 字段2, ...) VALUES (值1, 值2, ...), (值1, 值2, ...), (值1, 值2, ...);
+</code></pre>
+
+<blockquote>
+<p>备注: INSERT语句会返回实际插入的行数以
+例如: Query OK, 4 rows affected</p>
+</blockquote>
+
+<h3 id="更新-update">更新(Update)</h3>
+
+<pre><code class="language-SQL">-- 更新符合指定条件的行
+UPDATE &lt;表名&gt; SET 字段1=值1, 字段2=值2, ... WHERE ...;
+
+-- 更新表的所有行(慎用!)
+UPDATE &lt;表名&gt; SET 字段1=值1, 字段2=值2, ...;
+</code></pre>
+
+<blockquote>
+<p>备注: UPDATE语句会返回更新的行数以及WHERE条件匹配的行数
+例如: Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0</p>
+</blockquote>
+
+<h3 id="删除-delete">删除(Delete)</h3>
+
+<pre><code class="language-SQL">-- 删除符合指定条件的行
+DELETE FROM &lt;表名&gt; WHERE ...;
+
+-- 删除表的所有行(慎用!)
+DELETE FROM &lt;表名&gt;;
+
+-- truancate 清空表的所有行, 不同于Delete 这个操作不能回滚, 但速度更快
+TRUANCATE &lt;表名&gt;;
+</code></pre>
+
+<blockquote>
+<p>备注: DELETE语句也会返回删除的行数以及WHERE条件匹配的行数
+例如: Query OK, 1 row affected (0.01 sec)</p>
+</blockquote>
+
+<h3 id="其它实用插入-更新操作">其它实用插入/更新操作</h3>
+
+<pre><code class="language-SQL">-- 插入或替换: 如果我们希望插入一条新记录（INSERT），但如果记录已经存在，就先删除原记录，再插入新记录
+REPLACE INTO students (id, class_id, name, gender, score) VALUES (1, 1, '小明', 'F', 99);
+
+-- 插入或更新: 如果我们希望插入一条新记录（INSERT），但如果记录已经存在，就更新该记录
+INSERT INTO students (id, class_id, name, gender, score) VALUES (1, 1, '小明', 'F', 99) ON DUPLICATE KEY UPDATE name='小明', gender='F', score=99;
+
+-- 插入或忽略: 如果我们希望插入一条新记录（INSERT），但如果记录已经存在，就啥事也不干直接忽略
+INSERT IGNORE INTO students (id, class_id, name, gender, score) VALUES (1, 1, '小明', 'F', 99);
+</code></pre>
+
+<h3 id="快照">快照</h3>
+
+<p>如果想要对一个表进行快照，即复制一份当前表的数据到一个新表，可以结合CREATE TABLE和SELECT</p>
+
+<pre><code class="language-SQL">-- 全表快照(students_snapshoot 与 students 的结构内容一致)
+CREATE TABLE students_snapshoot SELECT * FROM students;
+
+-- 对class_id=1的记录进行快照，并存储为新表students_of_class1:
+CREATE TABLE students_of_class1 SELECT * FROM students WHERE class_id=1;
+</code></pre>
+
+<h3 id="写入查询结果集">写入查询结果集</h3>
+
+<p>如果查询结果集需要写入到表中，可以结合INSERT和SELECT，将SELECT语句的结果集直接插入到指定表中。</p>
+
+<p>例如，创建一个统计成绩的表statistics，记录各班的平均成绩：</p>
+
+<pre><code class="language-SQL">CREATE TABLE statistics (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    class_id BIGINT NOT NULL,
+    average DOUBLE NOT NULL,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO statistics (class_id, average) SELECT class_id, AVG(score) FROM students GROUP BY class_id;
+</code></pre>
 
                 </section>
             </article>
@@ -120,10 +204,6 @@
         </li>
     
         <li>
-            <a href="/blog/posts/2019-03-05-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C/">数据库内容复习04-MySql的其它操作<aside class="dates">Mar 5 2019</aside></a>
-        </li>
-    
-        <li>
             <a href="/blog/posts/2019-03-06-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A005-mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">数据库内容复习05-MySql的事务<aside class="dates">Mar 5 2019</aside></a>
         </li>
     
@@ -153,6 +233,10 @@
     
         <li>
             <a href="/blog/posts/2019-01-24-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E4%BD%BF%E7%94%A8%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">优美代码-使用冗余字段处理问题<aside class="dates">Jan 24 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-23-%E4%BA%A4%E6%B5%81%E6%8A%80%E5%B7%A7/">交流技巧<aside class="dates">Jan 23 2019</aside></a>
         </li>
     
 </ul>

@@ -47,8 +47,8 @@
                     </h1>
                     <h2 class="headline">
                     Mar 4, 2019 00:00
-                    · 2100 words
-                    · 5 minute read
+                    · 4412 words
+                    · 9 minute read
                       <span class="tags">
                       
                       
@@ -70,7 +70,7 @@
                 <section id="post-body">
                     
 
-<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://www.liaoxuefeng.com/wiki/001508284671805d39d23243d884b8b99f440bfae87b0f4000/00150916693927731d0ce561dfc4c6f8239c1951f0fd610000">廖雪峰</a> <a href="https://blog.csdn.net/JesseYoung/article/details/40108781">子查询</a> <a href="https://www.jianshu.com/p/08617ba12377">子查询</a> &hellip;</p>
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://www.liaoxuefeng.com/wiki/001508284671805d39d23243d884b8b99f440bfae87b0f4000/00150916693927731d0ce561dfc4c6f8239c1951f0fd610000">廖雪峰的MySQL教程</a> <a href="https://blog.csdn.net/JesseYoung/article/details/40108781">子查询</a> <a href="https://www.jianshu.com/p/08617ba12377">子查询</a> <a href="https://tech.meituan.com/2014/06/30/mysql-index.html">美团优化实例</a>&hellip;</p>
 
 <h3 id="预备">预备</h3>
 
@@ -418,6 +418,252 @@ select c.name from classes as c where exists (select * from students as s where 
 +------+
 </code></pre>
 
+<h3 id="查看执行计划-explain-desc">查看执行计划(Explain/Desc)</h3>
+
+<p>查看执行计划, 是为了确定sql查询的新能(比如是否使用索引, 可能读取的数据数量&hellip;) 帮助我们对SQL查询进行优化或者是对表进行优化</p>
+
+<p><strong>分析表</strong></p>
+
+<pre><code class="language-SQL">explain students;
+
++----------+---------------+------+-----+---------+----------------+
+| Field    | Type          | Null | Key | Default | Extra          |
++----------+---------------+------+-----+---------+----------------+
+| id       | int(11)       | NO   | PRI | &lt;null&gt;  | auto_increment |
+| name     | varchar(100)  | NO   |     | &lt;null&gt;  |                |
+| score    | decimal(10,0) | NO   |     | &lt;null&gt;  |                |
+| gender   | char(1)       | YES  |     | M       |                |
+| class_id | int(11)       | YES  | MUL | &lt;null&gt;  |                |
++----------+---------------+------+-----+---------+----------------+
+5 rows in set
+Time: 0.013s
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th align="center">字段名称</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">Field</td>
+<td align="center">字段表示的是列名</td>
+</tr>
+
+<tr>
+<td align="center">Type</td>
+<td align="center">字段表示的是列的数据类型</td>
+</tr>
+
+<tr>
+<td align="center">Null</td>
+<td align="center">字段表示这个列是否能取空值</td>
+</tr>
+
+<tr>
+<td align="center">Key</td>
+<td align="center">在mysql中key 和index 是一样的意思，这个Key列可能会看到有如下的值：PRI(主键)、MUL(普通的b-tree索引)、UNI(唯一索引)</td>
+</tr>
+
+<tr>
+<td align="center">Default</td>
+<td align="center">列的默认值</td>
+</tr>
+
+<tr>
+<td align="center">Extra</td>
+<td align="center">其它信息</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>分析select查询语句</strong></p>
+
+<pre><code class="language-SQL">explain select * from students where name=&quot;Emma&quot;\G;
+
+***************************[ 1. row ]***************************
+id            | 1
+select_type   | SIMPLE
+table         | students
+partitions    | &lt;null&gt;
+type          | ALL
+possible_keys | &lt;null&gt;
+key           | &lt;null&gt;
+key_len       | &lt;null&gt;
+ref           | &lt;null&gt;
+rows          | 12
+filtered      | 10.0
+Extra         | Using where
+
+1 row in set
+Time: 0.008s
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th align="center">字段名称</th>
+<th align="center">含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">table</td>
+<td align="center">查询的数据表</td>
+</tr>
+
+<tr>
+<td align="center">type</td>
+<td align="center">这是重要的列，显示连接使用了何种类型。从最好到最差的连接类型为const、eq_reg、ref、range、index和all。</td>
+</tr>
+
+<tr>
+<td align="center">possible_keys</td>
+<td align="center">显示可能应用在这张表中的索引。如果为空，没有可能的索引。可以为相关的域从where语句中选择一个合适的语句</td>
+</tr>
+
+<tr>
+<td align="center">key</td>
+<td align="center">实际使用的索引。如果为null，则没有使用索引。很少的情况下，mysql会选择优化不足的索引。这种情况下，可以在select语句中使用use index（indexname）来强制使用一个索引或者用ignore index（indexname）来强制mysql忽略索引</td>
+</tr>
+
+<tr>
+<td align="center">key_len</td>
+<td align="center">使用的索引的长度。在不损失精确性的情况下，长度越短越好</td>
+</tr>
+
+<tr>
+<td align="center">ref</td>
+<td align="center">显示索引的哪一列被使用了，如果可能的话，是一个常数</td>
+</tr>
+
+<tr>
+<td align="center">rows</td>
+<td align="center">这里是执行计划中估算的扫描行数，不是精确值</td>
+</tr>
+
+<tr>
+<td align="center">filtered</td>
+<td align="center">存储引擎返回的数据在server层过滤后，剩下多少满足查询的记录数量的比例，注意是百分比，不是具体记录数。</td>
+</tr>
+
+<tr>
+<td align="center">extra</td>
+<td align="center">关于mysql如何解析查询的额外信息。将在表4.3中讨论，但这里可以看到的坏的例子是using temporary和using filesort，意思mysql根本不能使用索引，结果是检索会很慢。</td>
+</tr>
+</tbody>
+</table>
+
+<p>type:
+- all: 全表扫描, mysql遍历全表以找到匹配的行 (如上面的实例: mysql一个遍历了12行(row: 12) 才找结果)
+- index: 索引全表查找, 把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可以使用索引排序或者分组的查询
+- index_merge: 表示查询使用了两个以上的索引，最后取交集或者并集，常见and ，or的条件使用了不同的索引，官方排序这个在ref_or_null之后，但是实际上由于要读取所个索引，性能可能大部分时间都不如range
+- range: 索引范围扫描, 常见于使用&gt;,&lt;,is null,between ,in ,like等运算符的查询中。
+- index_subquery: 用于in形式子查询使用到了辅助索引或者in常数列表，子查询可能返回重复值，可以使用索引将子查询去重
+- unique_subquery: 用于where中的in形式子查询，子查询返回不重复值唯一值
+- ref_or_null: 与ref方法类似，只是增加了null值的比较。实际用的不多
+- fulltext: 全文索引检索，要注意，全文索引的优先级很高，若全文索引和普通索引同时存在时，mysql不管代价，优先选择使用全文索引
+- ref: 不像eq_ref那样要求连接顺序，也没有主键和唯一索引的要求，只要使用相等条件检索时就可能出现，常见与辅助索引的等值查找。或者多列主键、唯一索引中，使用第一个列之外的列作为等值查找也会出现，总之，返回数据不唯一的等值查找就可能出现
+- eq_ref: 出现在要连接过个表的查询计划中，驱动表只返回一行数据，且这行数据是第二个表的主键或者唯一索引，且必须为not null，唯一索引和主键是多列时，只有所有的列都用作比较时才会出现eq_ref
+- const: 使用唯一索引或者主键，返回记录一定是1行记录的等值where条件时，通常type是const。其他数据库也叫做唯一索引扫描, 代表可以做一个类似常量级别的查找, 是sql查询中最好的情况</p>
+
+<p>select_type:
+- simple: 表示不需要union操作或者不包含子查询的简单select查询。有连接查询时，外层的查询为simple，且只有一个
+- primary: 一个需要union操作或者含有子查询的select，位于最外层的单位查询的select_type即为primary。且只有一个
+- union: union连接的两个select查询，第一个查询是dervied派生表，除了第一个表外，第二个以后的表select_type都是union
+- dependent union: 与union一样，出现在union 或union all语句中，但是这个查询要受到外部查询的影响
+- union result: 包含union的结果集，在union和union all语句中,因为它不需要参与查询，所以id字段为null
+- subquery: 除了from字句中包含的子查询外，其他地方出现的子查询都可能是subquery
+- dependent subquery: 与dependent union类似，表示这个subquery的查询要受到外部表查询的影响
+- derived: from字句中出现的子查询，也叫做派生表，其他数据库中可能叫做内联视图或嵌套select</p>
+
+<p><strong>实例:</strong></p>
+
+<pre><code class="language-SQL">
+-- 使用主键查询
+explain select * from students where id=7\G;
+
+***************************[ 1. row ]***************************
+id            | 1
+select_type   | SIMPLE
+table         | students
+partitions    | &lt;null&gt;
+type          | const
+possible_keys | PRIMARY
+key           | PRIMARY
+key_len       | 4
+ref           | const
+rows          | 1
+filtered      | 100.0
+Extra         | &lt;null&gt;
+1 row in set
+Time: 0.008s
+
+-- 范围查询
+explain select * from students where id &gt;= 6 and id &lt; 9\G;
+
+***************************[ 1. row ]***************************
+id            | 1
+select_type   | SIMPLE
+table         | students
+partitions    | &lt;null&gt;
+type          | range
+possible_keys | PRIMARY
+key           | PRIMARY
+key_len       | 4
+ref           | &lt;null&gt;
+rows          | 3
+filtered      | 100.0
+Extra         | Using where
+
+1 row in set
+Time: 0.008s
+
+
+-- 子查询查询
+explain select c.name from classes as c where exists (
+    select * from students as s where s.score &lt; 60 and c.id=s.class_id
+);
+
+***************************[ 1. row ]***************************
+id            | 1
+select_type   | PRIMARY
+table         | c
+partitions    | &lt;null&gt;
+type          | ALL
+possible_keys | &lt;null&gt;
+key           | &lt;null&gt;
+key_len       | &lt;null&gt;
+ref           | &lt;null&gt;
+rows          | 4
+filtered      | 100.0
+Extra         | Using where
+***************************[ 2. row ]***************************
+id            | 2
+select_type   | DEPENDENT SUBQUERY
+table         | s
+partitions    | &lt;null&gt;
+type          | ref
+possible_keys | FK_students_classes
+key           | FK_students_classes
+key_len       | 5
+ref           | my_test.c.id
+rows          | 3
+filtered      |  33.33
+Extra         | Using where
+
+2 rows in set
+Time: 0.008s
+</code></pre>
+
+<h3 id="优化实例">优化实例:</h3>
+
+<p><a href="https://tech.meituan.com/2014/06/30/mysql-index.html">美团优化实例</a></p>
+
                 </section>
             </article>
 
@@ -461,7 +707,15 @@ select c.name from classes as c where exists (select * from students as s where 
     
     
         <li>
-            <a href="/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96/">数据库内容复习04-MySql的查询优化<aside class="dates">Mar 4 2019</aside></a>
+            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96/">数据库内容复习06-MySql的优化<aside class="dates">Mar 11 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-05-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C/">数据库内容复习04-MySql的其它操作<aside class="dates">Mar 5 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-06-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A005-mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">数据库内容复习05-MySql的事务<aside class="dates">Mar 5 2019</aside></a>
         </li>
     
         <li>
@@ -490,14 +744,6 @@ select c.name from classes as c where exists (select * from students as s where 
     
         <li>
             <a href="/blog/posts/2019-01-23-%E4%BA%A4%E6%B5%81%E6%8A%80%E5%B7%A7/">交流技巧<aside class="dates">Jan 23 2019</aside></a>
-        </li>
-    
-        <li>
-            <a href="/blog/posts/2019-01-22-%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E5%88%B0%E5%BA%95%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88/">从输入url到页面展示到底发生了什么<aside class="dates">Jan 22 2019</aside></a>
-        </li>
-    
-        <li>
-            <a href="/blog/posts/2019-01-16-%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/">浏览器缓存<aside class="dates">Jan 16 2019</aside></a>
         </li>
     
 </ul>

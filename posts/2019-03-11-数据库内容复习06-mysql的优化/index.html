@@ -8,7 +8,7 @@
 		<meta name="author" content="Simeon">
 		<meta name="description" content="Simeon 个人微博">
 		<meta name="generator" content="Hugo 0.52" />
-		<title>使用web_API处理图片 &middot; Simeon&#39;s blog</title>
+		<title>数据库内容复习06-MySql的优化 &middot; Simeon&#39;s blog</title>
 		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
@@ -43,19 +43,23 @@
             <article>
                 <header>
                     <h1>
-                        使用web_API处理图片
+                        数据库内容复习06-MySql的优化
                     </h1>
                     <h2 class="headline">
-                    Dec 24, 2018 00:00
-                    · 116 words
+                    Mar 11, 2019 00:00
+                    · 124 words
                     · 1 minute read
                       <span class="tags">
                       
                       
                           
-                              <a href="https://simeon49.github.io/blog/tags/js">js</a>
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
                           
-                              <a href="https://simeon49.github.io/blog/tags/%E5%9B%BE%E7%89%87%E5%A4%84%E7%90%86">图片处理</a>
+                              <a href="https://simeon49.github.io/blog/tags/sql">SQL</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/mysql">MySql</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96">数据库查询优化</a>
                           
                       
                       
@@ -64,14 +68,11 @@
                 </header>
                 
                 <section id="post-body">
-                    <p>国外有一个人写了一篇<a href="https://medium.com/statuscode/filtering-images-using-web-audio-api-276555cca6ad">文章</a>, 大致内容就是通过将图片红,绿,蓝,三色的数据分别进行滤波得到新的图片,在这篇文章中我挑重点解释一下原文作者的意图</p>
+                    
 
-<hr />
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了<a href="https://codingstandards.iteye.com/blog/1344833">优化查询文章</a> <a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html">MySQL索引背后的数据结构及算法原理</a> <a href="https://coolshell.cn/articles/1846.html">MySQL性能优化的最佳20+条经验</a> <a href="https://dbaplus.cn/news-155-1531-1.html">万字总结：学习MySQL优化原理，这一篇就够了！</a>, <a href="https://draveness.me/mysql-innodb">『浅入浅出』MySQL 和 InnoDB</a>&hellip;</p>
 
-<p>直接看<a href="https://github.com/simeon49/javascript-practices/blob/master/project_05_%E4%BD%BF%E7%94%A8web_API%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/index.html">源码</a> <br>
-直接看<a href="https://simeon49.github.io/javascript-practices/project_05_%E4%BD%BF%E7%94%A8web_API%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/index.html">Demo</a> <strong>请使用FireFox</strong>  <br></p>
-
-<p>ruanyyifeng写的<a href="http://www.ruanyifeng.com/blog/2017/12/image-and-wave-filters.html">文章</a>很详细,看这篇文章吧</p>
+<h2 id="先做个好文章收藏-以后有空的时候整理成文章">先做个好文章收藏, 以后有空的时候整理成文章</h2>
 
                 </section>
             </article>
@@ -116,10 +117,6 @@
     
     
         <li>
-            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96/">数据库内容复习06-MySql的优化<aside class="dates">Mar 11 2019</aside></a>
-        </li>
-    
-        <li>
             <a href="/blog/posts/2019-03-05-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C/">数据库内容复习04-MySql的其它操作<aside class="dates">Mar 5 2019</aside></a>
         </li>
     
@@ -153,6 +150,10 @@
     
         <li>
             <a href="/blog/posts/2019-01-24-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E4%BD%BF%E7%94%A8%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">优美代码-使用冗余字段处理问题<aside class="dates">Jan 24 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-23-%E4%BA%A4%E6%B5%81%E6%8A%80%E5%B7%A7/">交流技巧<aside class="dates">Jan 23 2019</aside></a>
         </li>
     
 </ul>
