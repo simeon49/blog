@@ -47,7 +47,7 @@
                     </h1>
                     <h2 class="headline">
                     Mar 4, 2019 00:00
-                    · 4412 words
+                    · 4396 words
                     · 9 minute read
                       <span class="tags">
                       
@@ -558,33 +558,38 @@ Time: 0.008s
 </tbody>
 </table>
 
-<p>type:
-- all: 全表扫描, mysql遍历全表以找到匹配的行 (如上面的实例: mysql一个遍历了12行(row: 12) 才找结果)
-- index: 索引全表查找, 把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可以使用索引排序或者分组的查询
-- index_merge: 表示查询使用了两个以上的索引，最后取交集或者并集，常见and ，or的条件使用了不同的索引，官方排序这个在ref_or_null之后，但是实际上由于要读取所个索引，性能可能大部分时间都不如range
-- range: 索引范围扫描, 常见于使用&gt;,&lt;,is null,between ,in ,like等运算符的查询中。
-- index_subquery: 用于in形式子查询使用到了辅助索引或者in常数列表，子查询可能返回重复值，可以使用索引将子查询去重
-- unique_subquery: 用于where中的in形式子查询，子查询返回不重复值唯一值
-- ref_or_null: 与ref方法类似，只是增加了null值的比较。实际用的不多
-- fulltext: 全文索引检索，要注意，全文索引的优先级很高，若全文索引和普通索引同时存在时，mysql不管代价，优先选择使用全文索引
-- ref: 不像eq_ref那样要求连接顺序，也没有主键和唯一索引的要求，只要使用相等条件检索时就可能出现，常见与辅助索引的等值查找。或者多列主键、唯一索引中，使用第一个列之外的列作为等值查找也会出现，总之，返回数据不唯一的等值查找就可能出现
-- eq_ref: 出现在要连接过个表的查询计划中，驱动表只返回一行数据，且这行数据是第二个表的主键或者唯一索引，且必须为not null，唯一索引和主键是多列时，只有所有的列都用作比较时才会出现eq_ref
-- const: 使用唯一索引或者主键，返回记录一定是1行记录的等值where条件时，通常type是const。其他数据库也叫做唯一索引扫描, 代表可以做一个类似常量级别的查找, 是sql查询中最好的情况</p>
+<p><strong>type</strong>:</p>
 
-<p>select_type:
-- simple: 表示不需要union操作或者不包含子查询的简单select查询。有连接查询时，外层的查询为simple，且只有一个
-- primary: 一个需要union操作或者含有子查询的select，位于最外层的单位查询的select_type即为primary。且只有一个
-- union: union连接的两个select查询，第一个查询是dervied派生表，除了第一个表外，第二个以后的表select_type都是union
-- dependent union: 与union一样，出现在union 或union all语句中，但是这个查询要受到外部查询的影响
-- union result: 包含union的结果集，在union和union all语句中,因为它不需要参与查询，所以id字段为null
-- subquery: 除了from字句中包含的子查询外，其他地方出现的子查询都可能是subquery
-- dependent subquery: 与dependent union类似，表示这个subquery的查询要受到外部表查询的影响
-- derived: from字句中出现的子查询，也叫做派生表，其他数据库中可能叫做内联视图或嵌套select</p>
+<ul>
+<li>all: 全表扫描, mysql遍历全表以找到匹配的行 (如上面的实例: mysql一个遍历了12行(row: 12) 才找结果)</li>
+<li>index: 索引全表查找, 把索引从头到尾扫一遍，常见于使用索引列就可以处理不需要读取数据文件的查询、可以使用索引排序或者分组的查询</li>
+<li>index_merge: 表示查询使用了两个以上的索引，最后取交集或者并集，常见and ，or的条件使用了不同的索引，官方排序这个在ref_or_null之后，但是实际上由于要读取所个索引，性能可能大部分时间都不如range</li>
+<li>range: 索引范围扫描, 常见于使用&gt;,&lt;,is null,between ,in ,like等运算符的查询中。</li>
+<li>index_subquery: 用于in形式子查询使用到了辅助索引或者in常数列表，子查询可能返回重复值，可以使用索引将子查询去重</li>
+<li>unique_subquery: 用于where中的in形式子查询，子查询返回不重复值唯一值</li>
+<li>ref_or_null: 与ref方法类似，只是增加了null值的比较。实际用的不多</li>
+<li>fulltext: 全文索引检索，要注意，全文索引的优先级很高，若全文索引和普通索引同时存在时，mysql不管代价，优先选择使用全文索引</li>
+<li>ref: 不像eq_ref那样要求连接顺序，也没有主键和唯一索引的要求，只要使用相等条件检索时就可能出现，常见与辅助索引的等值查找。或者多列主键、唯一索引中，使用第一个列之外的列作为等值查找也会出现，总之，返回数据不唯一的等值查找就可能出现</li>
+<li>eq_ref: 出现在要连接过个表的查询计划中，驱动表只返回一行数据，且这行数据是第二个表的主键或者唯一索引，且必须为not null，唯一索引和主键是多列时，只有所有的列都用作比较时才会出现eq_ref</li>
+<li>const: 使用唯一索引或者主键，返回记录一定是1行记录的等值where条件时，通常type是const。其他数据库也叫做唯一索引扫描, 代表可以做一个类似常量级别的查找, 是sql查询中最好的情况</li>
+</ul>
+
+<p><strong>select_type</strong>:</p>
+
+<ul>
+<li>simple: 表示不需要union操作或者不包含子查询的简单select查询。有连接查询时，外层的查询为simple，且只有一个</li>
+<li>primary: 一个需要union操作或者含有子查询的select，位于最外层的单位查询的select_type即为primary。且只有一个</li>
+<li>union: union连接的两个select查询，第一个查询是dervied派生表，除了第一个表外，第二个以后的表select_type都是union</li>
+<li>dependent union: 与union一样，出现在union 或union all语句中，但是这个查询要受到外部查询的影响</li>
+<li>union result: 包含union的结果集，在union和union all语句中,因为它不需要参与查询，所以id字段为null</li>
+<li>subquery: 除了from字句中包含的子查询外，其他地方出现的子查询都可能是subquery</li>
+<li>dependent subquery: 与dependent union类似，表示这个subquery的查询要受到外部表查询的影响</li>
+<li>derived: from字句中出现的子查询，也叫做派生表，其他数据库中可能叫做内联视图或嵌套select</li>
+</ul>
 
 <p><strong>实例:</strong></p>
 
-<pre><code class="language-SQL">
--- 使用主键查询
+<pre><code class="language-SQL">-- 使用主键查询
 explain select * from students where id=7\G;
 
 ***************************[ 1. row ]***************************
@@ -662,7 +667,7 @@ Time: 0.008s
 
 <h3 id="优化实例">优化实例:</h3>
 
-<p><a href="https://tech.meituan.com/2014/06/30/mysql-index.html">美团优化实例</a></p>
+<p>参考: <a href="https://tech.meituan.com/2014/06/30/mysql-index.html">美团优化实例</a></p>
 
                 </section>
             </article>
@@ -711,11 +716,11 @@ Time: 0.008s
         </li>
     
         <li>
-            <a href="/blog/posts/2019-03-05-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C/">数据库内容复习04-MySql的其它操作<aside class="dates">Mar 5 2019</aside></a>
+            <a href="/blog/posts/2019-03-06-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A005-mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">数据库内容复习05-MySql的事务<aside class="dates">Mar 6 2019</aside></a>
         </li>
     
         <li>
-            <a href="/blog/posts/2019-03-06-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A005-mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">数据库内容复习05-MySql的事务<aside class="dates">Mar 5 2019</aside></a>
+            <a href="/blog/posts/2019-03-05-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C/">数据库内容复习04-MySql的其它操作<aside class="dates">Mar 5 2019</aside></a>
         </li>
     
         <li>
