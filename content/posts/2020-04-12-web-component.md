@@ -1,0 +1,21 @@
++++
+title = "数据库内容复习06-MySql的优化原理"
+description = "数据库内容复习06-MySql的优化原理"
+tags = [
+    "数据库", "SQL", "MySql", "数据库查询优化"
+]
+date = "2019-03-11"
+categories = [
+    "数据库",
+]
+menu = "main"
++++
+
+复习数据库方面的内容, 以下为笔记内容, 参考了:<br>
+[优化查询文章](https://codingstandards.iteye.com/blog/1344833)<br>
+[MySQL索引背后的数据结构及算法原理](http://blog.codinglabs.org/articles/theory-of-mysql-index.html)<br>[MySQL性能优化的最佳20+条经验](https://coolshell.cn/articles/1846.html)<br>
+[万字总结：学习MySQL优化原理，这一篇就够了！](https://dbaplus.cn/news-155-1531-1.html)<br>
+[『浅入浅出』MySQL 和 InnoDB](https://draveness.me/mysql-innodb)<br>
+...
+
+## 先做个好文章收藏, 以后有空的时候整理成文章
