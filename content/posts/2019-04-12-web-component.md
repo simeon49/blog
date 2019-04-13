@@ -39,7 +39,7 @@ Custom Elements 顾名思义，是提供一种方式让开发者可以自定义 
 
 #### HTML模板（HTML Templates）
 
-为了更友好的处理组件模板，Web Components规范，支持<template>模板标签，HTML模板定义了使用<template>标签声明可以通过脚本操作插入文档的HTML模板片段：
+为了更友好的处理组件模板，Web Components规范，支持\<template\>模板标签，HTML模板定义了使用\<template\>标签声明可以通过脚本操作插入文档的HTML模板片段：
 
 ```html
 <template id="menusTemplate">
@@ -58,11 +58,11 @@ var frag = document.importNode(menusTemplate.content, true);
 document.querySelector('.menus').appendChild(frag);
 ```
 
-> TEMPLATE标签:
-> <template>标签本质上与其他HTML内置标签一样，可以使用DOM API进行操作，但是需要明白，在将模板激活（生成DOM或插入文档）前：
-> 1.<template>标签内的内容不会被渲染；
-> 2.标签内的图片，等媒体资源不会被加载；
-> 3.标签不会出现在DOM树，审查元素看不到;
+> **TEMPLATE标签:**
+> \<template\>标签本质上与其他HTML内置标签一样，可以使用DOM API进行操作，但是需要明白，在将模板激活（生成DOM或插入文档）前：
+> 1. \<template\>标签内的内容不会被渲染；
+> 2. 标签内的图片，等媒体资源不会被加载；
+> 3. 标签不会出现在DOM树，审查元素看不到;
 
 
 ## 实例
