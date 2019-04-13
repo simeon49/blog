@@ -32,6 +32,7 @@ Custom Elements 顾名思义，是提供一种方式让开发者可以自定义 
 如何在HTML文档中引入另一个web文档或web组件呢？像JSP或PHP语言都对HTML语法进行了拓展，我们可以使用诸如<include>标签直接引入另一个文档，然而在这之前，原生HTML规范并不支持直接引入另一文档，通常都得通过ajax请求另一文档内容，然后通过JavaScript使用DOM API将内容插入，对于组件化开发和使用，这样显然不是我们期望的结果，这与组件的易用性是背离的，所以，HTML imports定义了如何在文档内引入和重用另一文档。
 
 在文档内直接引入外链资源的文档或web组件，语法如下，使用<link>标签：
+
 ```html
 <link rel="import" href="components.html">
 ```
