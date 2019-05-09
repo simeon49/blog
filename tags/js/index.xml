@@ -6,10 +6,19 @@
     <description>Recent content in Js on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
-    <lastBuildDate>Wed, 16 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 12 Apr 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://simeon49.github.io/blog/tags/js/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>web-component</title>
+      <link>https://simeon49.github.io/blog/posts/2019-04-12-web-component/</link>
+      <pubDate>Fri, 12 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2019-04-12-web-component/</guid>
+      <description>w3c web components 什么是web component 前端框架已经变得很流行, Angular, Vue, React&amp;hellip; 这些框架为开发者提供很多便于使用方法来解决实际问题, 组件就是这些技术中的一个, 许多人为框架</description>
+    </item>
     
     <item>
       <title>浏览器缓存</title>

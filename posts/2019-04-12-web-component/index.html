@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<meta name="author" content="Simeon">
+		<meta name="description" content="Simeon 个人微博">
+		<meta name="generator" content="Hugo 0.52" />
+		<title>web-component &middot; Simeon&#39;s blog</title>
+		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/font-awesome.min.css">
+		
+
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://simeon49.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://simeon49.github.io/blog/posts'>Archive</a>
+	<a href='https://simeon49.github.io/blog/tags'>Tags</a>
+	<a href='https://simeon49.github.io/blog/categories'>Categories</a>
+	<a href='https://simeon49.github.io/blog/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        web-component
+                    </h1>
+                    <h2 class="headline">
+                    Apr 12, 2019 00:00
+                    · 1395 words
+                    · 3 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://simeon49.github.io/blog/tags/js">js</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/web-component">web component</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p><a href="https://w3c.github.io/webcomponents/">w3c web components</a></p>
+
+<h2 id="什么是web-component">什么是web component</h2>
+
+<p>前端框架已经变得很流行, Angular, Vue, React&hellip; 这些框架为开发者提供很多便于使用方法来解决实际问题, 组件就是这些技术中的一个, 许多人为框架编写组件来减少自己和他人的开发工作量, 框架的组件使用起来很方便但问题是使用不同框架开发的组件不能用于其它框架, 于是W3C做了一个决定让浏览器直接支组件这一特性(持按某一规范编写). 这就是 Web Components 通过一种标准化的非侵入的方式封装一个组件，每个组件能组织好它自身的 HTML 结构、CSS 样式、JavaScript 代码，并且不会干扰页面上的其他代码<br></p>
+
+<h2 id="涉及到的技术">涉及到的技术</h2>
+
+<h4 id="自定义元素-custom-elements">自定义元素（Custom Elements）</h4>
+
+<p>Custom Elements 顾名思义，是提供一种方式让开发者可以自定义 HTML 元素，包括特定的组成，样式和行为。支持 Web Components 标准的浏览器会提供一系列 API 给开发者用于创建自定义的元素，或者扩展现有元素。</p>
+
+<h4 id="影子dom-shadow-dom">影子DOM（Shadow DOM）</h4>
+
+<p>影子DOM API提供了attachShadow()方法，创建一个影子DOM，支持将封装的内容或组件作为一个独立DOM子树附加进一个HTML文档，组件内与外部隔离，样式互不影响，这也印证了组件开发的封装性需求</p>
+
+<h4 id="html导入-html-imports">HTML导入（HTML Imports）</h4>
+
+<p>如何在HTML文档中引入另一个web文档或web组件呢？像JSP或PHP语言都对HTML语法进行了拓展，我们可以使用诸如<include>标签直接引入另一个文档，然而在这之前，原生HTML规范并不支持直接引入另一文档，通常都得通过ajax请求另一文档内容，然后通过JavaScript使用DOM API将内容插入，对于组件化开发和使用，这样显然不是我们期望的结果，这与组件的易用性是背离的，所以，HTML imports定义了如何在文档内引入和重用另一文档。</p>
+
+<p>在文档内直接引入外链资源的文档或web组件，语法如下，使用<link>标签：</p>
+
+<pre><code class="language-html">&lt;link rel=&quot;import&quot; href=&quot;components.html&quot;&gt;
+</code></pre>
+
+<h4 id="html模板-html-templates">HTML模板（HTML Templates）</h4>
+
+<p>为了更友好的处理组件模板，Web Components规范，支持&lt;template&gt;模板标签，HTML模板定义了使用&lt;template&gt;标签声明可以通过脚本操作插入文档的HTML模板片段：</p>
+
+<pre><code class="language-html">&lt;template id=&quot;menusTemplate&quot;&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Home&lt;/li&gt;
+        &lt;li&gt;About&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/template&gt;
+</code></pre>
+
+<p>使用脚本操作，该元素content属性可访问模板内容：</p>
+
+<pre><code class="language-js">var menusTemplate = document.querySelector('#menusTemplate');
+var frag = document.importNode(menusTemplate.content, true);
+document.querySelector('.menus').appendChild(frag);
+</code></pre>
+
+<blockquote>
+<p><strong>TEMPLATE标签:</strong>
+&lt;template&gt;标签本质上与其他HTML内置标签一样，可以使用DOM API进行操作，但是需要明白，在将模板激活（生成DOM或插入文档）前：
+1. &lt;template&gt;标签内的内容不会被渲染；
+2. 标签内的图片，等媒体资源不会被加载；
+3. 标签不会出现在DOM树，审查元素看不到;</p>
+</blockquote>
+
+<h2 id="实例">实例</h2>
+
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+  &lt;script src=&quot;./components/components.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    /* 选择所有已定义的元素 */
+    :defined {
+      font-style: italic;
+    }
+    /* 全局的样式将不会对 national-flag 里的样式产生影响 */
+    img {
+      width: 500px;
+      height: 500px;
+      background: red;
+      display: block;
+    }
+    .flag {
+      text-align: center;
+      user-select: none;
+    }
+    label {
+      cursor: pointer;
+    }
+  &lt;/style&gt;
+  &lt;title&gt;Web Component&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class=&quot;flag&quot;&gt;
+    &lt;national-flag id=&quot;national-flag&quot; country='America'&gt;
+      &lt;p&gt;国旗&lt;/p&gt; &lt;!-- 此处代码将在 slot 位置显示 --&gt;
+    &lt;/national-flag&gt;&lt;br&gt;
+
+    &lt;p id=&quot;country-choice&quot;&gt;选择国家旗帜:
+      &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;country&quot; value=&quot;America&quot; checked=&quot;checked&quot;&gt;America&lt;/label&gt;
+      &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;country&quot; value=&quot;England&quot;&gt;England&lt;/label&gt;
+      &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;country&quot; value=&quot;France&quot;&gt;France&lt;/label&gt;
+      &lt;label&gt;&lt;input type=&quot;radio&quot; name=&quot;country&quot; value=&quot;*&quot;&gt;Other&lt;/label&gt;
+    &lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;script&gt;
+    document.getElementById('country-choice').addEventListener('click', ev =&gt; {
+      window['ev'] = ev;
+      if (ev.target.nodeName.toLowerCase() === 'input' &amp;&amp; ev.target.name === 'country') {
+        document.getElementById('national-flag').country = ev.target.value;
+      }
+    })
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+
+<pre><code class="language-js">const _FLAGS_PATH_MAP = {
+  'america': './components/assert/America.svg',
+  'england': './components/assert/England.svg',
+  'france': './components/assert/France.svg',
+  'unknown': './components/assert/Unknown.svg',
+};
+
+
+class NationalFlag extends HTMLElement {
+  constructor() {
+    super();
+    this.isInint = false;
+  }
+
+  connectedCallback() {
+    console.log('connectedCallback is called.');
+    const shadowRoot = this.attachShadow({mode: 'open'});
+    shadowRoot.innerHTML = `
+    &lt;style&gt;
+      img {
+        width: 128px;
+        height: 128px;
+      }
+    &lt;/style&gt;
+
+    &lt;img src=&quot;${this._getCountryFlag(this.country)}&quot; /&gt;
+    &lt;slot&gt;&lt;slot&gt;
+    `;
+    this.isInint = true;
+  }
+
+  disconnectedCallback() {
+    console.log('disconnectedCallback is called.');
+  }
+
+  get country() {
+    return this.getAttribute('country');
+  }
+
+  set country(country) {
+    console.log(`set country: ${country}`);
+    this.setAttribute('country', country);
+    const img = this.shadowRoot.querySelector('img');
+    img.src = this._getCountryFlag(this.country);
+  }
+
+  _getCountryFlag(country) {
+    country = country.toLowerCase();
+    let path = _FLAGS_PATH_MAP[country];
+    path = path ? path : _FLAGS_PATH_MAP.unknown;
+    return path;
+  }
+}
+// 定义 national-flag 标签
+customElements.define('national-flag', NationalFlag);
+
+</code></pre>
+
+<p>直接看<a href="https://github.com/simeon49/javascript-practices/tree/master/project_10_web_component">源码</a> <br>
+直接看<a href="https://simeon49.github.io/javascript-practices/project_10_web_component/index.html">Demo</a> <br></p>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'simeon49';
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+        
+        var disquesLoaded = false;
+        dsq.onload = function () {
+            disquesLoaded = true;
+        };
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+        setTimeout(() => {
+            if (!disquesLoaded) {
+                alert('加载disques 失败!');
+            }
+        }, 3000);
+
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+                <ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96%E5%8E%9F%E7%90%86/">数据库内容复习06-MySql的优化原理<aside class="dates">Mar 11 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-06-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A005-mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">数据库内容复习05-MySql的事务<aside class="dates">Mar 6 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-05-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C/">数据库内容复习04-MySql的其它操作<aside class="dates">Mar 5 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/">数据库内容复习03-MySql的查询<aside class="dates">Mar 4 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/">数据库内容复习02-MySql的索引们<aside class="dates">Feb 28 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-02-26-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A001-%E6%A6%82%E8%BF%B0/">数据库内容复习01-概述<aside class="dates">Feb 26 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-02-12-%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E8%AF%81gplbsdmitmozillaapache%E5%92%8Clgpl%E7%9A%84%E5%8C%BA%E5%88%AB/">开源许可证GPL、BSD、MIT、Mozilla、Apache和LGPL的区别<aside class="dates">Feb 12 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-26-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E5%8E%9F%E5%9E%8B/">优美代码-原型<aside class="dates">Jan 26 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-25-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E6%AD%A3%E4%BA%A4/">优美代码-正交<aside class="dates">Jan 25 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-24-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E4%BD%BF%E7%94%A8%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/">优美代码-使用冗余字段处理问题<aside class="dates">Jan 24 2019</aside></a>
+        </li>
+    
+</ul>
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/simeon49">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2019 <i class="fa fa-heart" aria-hidden="true"></i> Simeon
+    
+    </p>
+    
+</footer>
+
+        </section>
+
+        <script src="https://simeon49.github.io/blog/js/jquery-3.3.1.min.js"></script>
+<script src="https://simeon49.github.io/blog/js/main.js"></script>
+<script src="https://simeon49.github.io/blog/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+<script>
+var baiduAnalytics = '74fafdde017951e1df78c761e7c017bc';
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?" + baiduAnalytics;
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+    </body>
+</html>
