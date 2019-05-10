@@ -457,6 +457,7 @@ th, td {
     text-align: left;
     padding-right: 20px;
     vertical-align: top;
+    border:1px solid #dadadc;
 }
 
 table td, td {
