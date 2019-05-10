@@ -8,7 +8,7 @@
 		<meta name="author" content="Simeon">
 		<meta name="description" content="Simeon 个人微博">
 		<meta name="generator" content="Hugo 0.52" />
-		<title>交流技巧 &middot; Simeon&#39;s blog</title>
+		<title>数据库内容复习07-MySql的行级锁共享锁与排它锁 &middot; Simeon&#39;s blog</title>
 		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
 		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
@@ -43,17 +43,23 @@
             <article>
                 <header>
                     <h1>
-                        交流技巧
+                        数据库内容复习07-MySql的行级锁共享锁与排它锁
                     </h1>
                     <h2 class="headline">
-                    Jan 23, 2019 00:00
-                    · 730 words
+                    May 10, 2019 00:00
+                    · 718 words
                     · 2 minute read
                       <span class="tags">
                       
                       
                           
-                              <a href="https://simeon49.github.io/blog/tags/%E4%BA%A4%E6%B5%81">交流</a>
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/sql">SQL</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/mysql">MySql</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96">数据库查询优化</a>
                           
                       
                       
@@ -64,69 +70,139 @@
                 <section id="post-body">
                     
 
-<p>有一本书&rdquo;程序员修炼之道&rdquo; 中提到一个关于交流方面的技巧, 在此整理出来:</p>
+<p>复习数据库方面的内容, 以下为笔记内容, 参考了:<br>
+<a href="https://www.hollischuang.com/archives/923">MySQL中的共享锁与排他锁</a><br>
+&hellip;</p>
 
-<h3 id="1-了解你的听众">1.了解你的听众:</h3>
+<h2 id="共享锁-share-lock">共享锁(Share Lock)</h2>
 
-<p>What do you want them to learn?</p>
+<p>共享锁又称读锁，是读取操作创建的锁。其他用户可以并发读取数据，但任何事务都不能对数据进行修改（获取数据上的排他锁），直到已释放所有共享锁。</p>
 
-<blockquote>
-<p>你想让他们学到什么?</p>
-</blockquote>
+<p>如果事务T对数据A加上共享锁后，则其他事务只能对A再加共享锁，不能加排他锁。获准共享锁的事务只能读数据，不能修改数据。</p>
 
-<p>What is their interest in what you&rsquo;ve got to say?</p>
+<h3 id="用法">用法</h3>
 
-<blockquote>
-<p>他们对你讲的什么感兴趣?</p>
-</blockquote>
+<pre><code class="language-sql">SELECT ... LOCK IN SHARE MODE;
 
-<p>How sophisticated are they?</p>
+在查询语句后面增加LOCK IN SHARE MODE，Mysql会对查询结果中的每行都加共享锁，当没有其他线程对查询结果集中的任何一行使用排他锁时，可以成功申请共享锁，否则会被阻塞。其他线程也可以读取使用了共享锁的表，而且这些线程读取的是同一个版本的数据。
+</code></pre>
 
-<blockquote>
-<p>他们有多丰富的经验?</p>
-</blockquote>
+<h3 id="实例">实例</h3>
 
-<p>How much detail do they want?</p>
+<table>
+<thead>
+<tr>
+<th align="left">终端 A</th>
+<th align="center">终端 B</th>
+</tr>
+</thead>
 
-<blockquote>
-<p>他们想要多少细节?</p>
-</blockquote>
+<tbody>
+<tr>
+<td align="left">set autocommit=0</td>
+<td align="center"></td>
+</tr>
 
-<p>Whom do you want to own the information?</p>
+<tr>
+<td align="left">select id, name from myTable where id in (1, 2) lock in share mode;<br> 记录: (1, 摩西), (2, 约书亚)</td>
+<td align="center"></td>
+</tr>
 
-<blockquote>
-<p>你想要让谁拥有这些信息?</p>
-</blockquote>
+<tr>
+<td align="left"></td>
+<td align="center">select id, name from myTable where id in (1, 2);<br> 记录: (1, 摩西), (2, 约书亚)</td>
+</tr>
 
-<p>How can you motivate them to listen to you?</p>
+<tr>
+<td align="left"></td>
+<td align="center">update myTable set name=加勒 where where id=3;<br> (更新成功)</td>
+</tr>
 
-<blockquote>
-<p>你如何促使他们听你说话?</p>
-</blockquote>
+<tr>
+<td align="left"></td>
+<td align="center">update myTable set name=Mose where where id=1;<br> (卡住&hellip;)</td>
+</tr>
 
-<h3 id="2-知道你想要说什么">2.知道你想要说什么:</h3>
+<tr>
+<td align="left"></td>
+<td align="center">(卡住&hellip;)</td>
+</tr>
 
-<p>交流之前总结一个大纲, 然后问自己&rdquo;这是否讲清楚我所想要说的内容&rdquo;, 然后提炼它, 直到确实如此为止.</p>
+<tr>
+<td align="left">commit;</td>
+<td align="center"></td>
+</tr>
 
-<h3 id="3-选择时机">3.选择时机:</h3>
+<tr>
+<td align="left"></td>
+<td align="center">(更新成功)</td>
+</tr>
+</tbody>
+</table>
 
-<p>这是星期五的下午六点, 审计人员进驻已有一周, 你的老板最小的孩子在医院里, 外面下着瓢泼大雨, 这时候开车回家可定是一场噩梦, 这大概也不是向他提出PC内存升级的好时候.<br></p>
+<h2 id="排他锁-exclusive-lock">排他锁（eXclusive Lock）</h2>
 
-<p>为了了解你的听众需要听什么, 你需要弄清楚他们的&rdquo;轻重缓急&rdquo;是什么. 找一个刚刚因丢失源码而遭到老板批评的经理, 向他介绍你关于源码仓库的构想, 你将会拥有一个更容易接纳的倾听者. 要让你所说的适得其时, 在内容切实相关. 有时候, 只要简单地问一句&rdquo;现在我们可以谈谈&hellip;?&rdquo; 就可以了.</p>
+<p>排他锁又称写锁，如果事务T对数据A加上排他锁后，则其他事务不能再对A加任任何类型的封锁。获准排他锁的事务既能读数据，又能修改数据。</p>
 
-<h3 id="4-选择风格">4.选择风格</h3>
+<h3 id="用法-1">用法</h3>
 
-<p>调整你的交流风格, 让其适应你的听众. 有些人喜欢正式的简报, 另一些人喜欢简单的备忘录或电子邮件, 如果有疑问就会询问对方.<br></p>
+<pre><code class="language-sql">SELECT ... FOR UPDATE;
 
-<blockquote>
-<p>但是要记住, 你也是交流事务的一方, 如果有人说, 他们需要你用一段话进行描述, 而你觉得不用若干页纸就无法做到, 如实告诉他们, 记住, 这样的反馈也是交流的一种形式</p>
-</blockquote>
+在查询语句后面增加FOR UPDATE，Mysql会对查询结果中的每行都加排他锁，当没有其他线程对查询结果集中的任何一行使用排他锁时，可以成功申请排他锁，否则会被阻塞。
+</code></pre>
 
-<h3 id="5-让听众参与">5.让听众参与</h3>
+<h3 id="实例-1">实例</h3>
 
-<h3 id="6-做倾听者">6.做倾听者</h3>
+<table>
+<thead>
+<tr>
+<th align="left">终端 A</th>
+<th align="center">终端 B</th>
+</tr>
+</thead>
 
-<p>如果你想要大家听你说话, 你必须使用一种方法: 听他们说话, 即使你掌握着全部信息, 即使那是一个正式的会议, 你站在20个衣着正式的人面前 &mdash;- 如果你不听他们说话, 他们也不会听你说话.</p>
+<tbody>
+<tr>
+<td align="left">set autocommit=0</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="left">select id, name from myTable where id in (1, 2) for update;<br> 记录: (1, 摩西), (2, 约书亚)</td>
+<td align="center"></td>
+</tr>
+
+<tr>
+<td align="left"></td>
+<td align="center">select id, name from myTable where id in (4, 5, 6);<br> (正常放回记录)</td>
+</tr>
+
+<tr>
+<td align="left"></td>
+<td align="center">select id, name from myTable where id=1;<br> (卡住&hellip;)</td>
+</tr>
+
+<tr>
+<td align="left"></td>
+<td align="center">(卡住&hellip;)</td>
+</tr>
+
+<tr>
+<td align="left">update myTable set name=Mose where where id=1;</td>
+<td align="center">(卡住&hellip;)</td>
+</tr>
+
+<tr>
+<td align="left">commit;</td>
+<td align="center">(卡住&hellip;)</td>
+</tr>
+
+<tr>
+<td align="left"></td>
+<td align="center">返回记录: (1, Mose)</td>
+</tr>
+</tbody>
+</table>
 
                 </section>
             </article>
@@ -171,10 +247,6 @@
     
     
         <li>
-            <a href="/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81/">数据库内容复习07-MySql的行级锁共享锁与排它锁<aside class="dates">May 10 2019</aside></a>
-        </li>
-    
-        <li>
             <a href="/blog/posts/2019-04-12-web-component/">web-component<aside class="dates">Apr 12 2019</aside></a>
         </li>
     
@@ -208,6 +280,10 @@
     
         <li>
             <a href="/blog/posts/2019-01-26-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E5%8E%9F%E5%9E%8B/">优美代码-原型<aside class="dates">Jan 26 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-25-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E6%AD%A3%E4%BA%A4/">优美代码-正交<aside class="dates">Jan 25 2019</aside></a>
         </li>
     
 </ul>
