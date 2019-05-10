@@ -422,12 +422,35 @@ hr {
     background: #eee;
 }
 
+
 table {
     width: 100%;
     margin: 40px 0;
     border-collapse: collapse;
     font-size: 13px;
     line-height: 1.5em;
+    margin: 0 auto;
+    text-align: center;
+}
+
+table td,
+table th {
+    border: 1px solid #cad9ea;
+    color: #666;
+    height: 30px;
+}
+
+table thead th {
+    background-color: #CCE8EB;
+    width: 100px;
+}
+
+table tr:nth-child(odd) {
+    background: #fff;
+}
+
+table tr:nth-child(even) {
+    background: rgb(248, 235, 161);
 }
 
 th, td {
