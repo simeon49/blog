@@ -79,11 +79,11 @@
 
 <p>二元分类的问题很常见，包括信用卡发放、垃圾邮件判别、患者疾病诊断、答案正确性估计等等。二元分类是机器学习领域非常核心和基本的问题。二元分类有线性模型也有非线性模型，根据实际问题情况，选择不同的模型。</p>
 
-<p><img src="img/5c6d3459fba2b7d3da1fe29dda9a8c09.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/5c6d3459fba2b7d3da1fe29dda9a8c09.jpg" alt="这里写图片描述" /></p>
 
 <p>除了二元分类，也有多元分类（Multiclass Classification）问题。顾名思义，多元分类的输出多于两个，y={1, 2, … , K}, K&gt;2. 一般多元分类的应用有数字识别、图片内容识别等等。</p>
 
-<p><img src="img/33b3456668ed201b68aafa318ce5685b.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/33b3456668ed201b68aafa318ce5685b.jpg" alt="这里写图片描述" /></p>
 
 <p>二元分类和多元分类都属于分类问题，它们的输出都是离散值。二对于另外一种情况，比如训练模型，预测房屋价格、股票收益多少等，这类问题的输出y=R，即范围在整个实数空间，是连续的。这类问题，我们把它叫做回归（Regression）。最简单的线性回归是一种典型的回归模型。</p>
 
@@ -91,13 +91,13 @@
 
 <p>简单总结一下，机器学习按照输出空间划分的话，包括二元分类、多元分类、回归、结构化学习等不同的类型。其中二元分类和回归是最基础、最核心的两个类型，也是我们课程主要介绍的部分。</p>
 
-<p><img src="img/42f7b7f9525d0b9dec6cb751ae179553.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/42f7b7f9525d0b9dec6cb751ae179553.jpg" alt="这里写图片描述" /></p>
 
 <h3 id="二-learning-with-different-data-label-yn"><strong>二、Learning with Different Data Label yn</strong></h3>
 
 <p>如果我们拿到的训练样本D既有输入特征x，也有输出yn，那么我们把这种类型的学习称为监督式学习（Supervised Learning）。监督式学习可以是二元分类、多元分类或者是回归，最重要的是知道输出标签yn。与监督式学习相对立的另一种类型是非监督式学习（Unsupervised learning）。非监督式学习是没有输出标签yn的，典型的非监督式学习包括：聚类（clustering）问题，比如对网页上新闻的自动分类；密度估计，比如交通路况分析；异常检测，比如用户网络流量监测。通常情况下，非监督式学习更复杂一些，而且非监督的问题很多都可以使用监督式学习的一些算法思想来实现。</p>
 
-<p><img src="img/027cbda81af889745bbd0bf08263a48e.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/027cbda81af889745bbd0bf08263a48e.jpg" alt="这里写图片描述" /></p>
 
 <p>介于监督式和非监督式学习之间的叫做半监督式学习（Semi-supervised Learning）。顾名思义，半监督式学习就是说一部分数据有输出标签yn，而另一部分数据没有输出标签yn。在实际应用中，半监督式学习有时候是必须的，比如医药公司对某些药物进行检测，考虑到成本和实验人群限制等问题，只有一部分数据有输出标签yn。</p>
 
@@ -105,7 +105,7 @@
 
 <p>简单总结一下，机器学习按照数据输出标签yn划分的话，包括监督式学习、非监督式学习、半监督式学习和增强学习等。其中，监督式学习应用最为广泛。</p>
 
-<p><img src="img/1890d66a62f112b767f018cde3e2e55c.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/1890d66a62f112b767f018cde3e2e55c.jpg" alt="这里写图片描述" /></p>
 
 <h3 id="三-learning-with-different-protocol-f-xn-yn"><strong>三、Learning with Different Protocol f(xn,yn)</strong></h3>
 
@@ -127,7 +127,7 @@
 
 <p>简单总结一下，按照不同的协议，机器学习可以分为batch, online, active。这三种学习类型分别可以类比为：填鸭式，老师教学以及主动问问题。</p>
 
-<p><img src="img/301228323e003e92233237706a958f91.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/301228323e003e92233237706a958f91.jpg" alt="这里写图片描述" /></p>
 
 <h3 id="四-learning-with-different-input-space-x"><strong>四、Learning with Different Input Space X</strong></h3>
 
@@ -141,13 +141,13 @@
 
 <p>简单总结一下，根据输入X类型不同，可以分为concetet, raw, abstract。将一些抽象的特征转换为具体的特征，是机器学习过程中非常重要的一个环节。在《机器学习技法》课程中，我们再详细介绍。</p>
 
-<p><img src="img/5b8e649119d0311023e13eff815c3c2c.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/5b8e649119d0311023e13eff815c3c2c.jpg" alt="这里写图片描述" /></p>
 
 <h3 id="五-总结"><strong>五、总结：</strong></h3>
 
 <p>本节课主要介绍了机器学习的类型，包括Out Space、Data Label、Protocol、Input Space四种类型。</p>
 
-<p><img src="img/bd9d6af0a6c24e051f85de8085dde493.jpg" alt="这里写图片描述" /></p>
+<p><img src="../../pic/ML/bd9d6af0a6c24e051f85de8085dde493.jpg" alt="这里写图片描述" /></p>
 
 <p><strong><em>注明：</em></strong></p>
 
@@ -220,11 +220,11 @@
         </li>
     
         <li>
-            <a href="/blog/posts/2020-01-01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B001/">机器学习基石-笔记01<aside class="dates">Jan 1 2020</aside></a>
+            <a href="/blog/posts/2020-01-02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B002/">机器学习基石-笔记02<aside class="dates">Jan 2 2020</aside></a>
         </li>
     
         <li>
-            <a href="/blog/posts/2020-01-02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B002/">机器学习基石-笔记01<aside class="dates">Jan 1 2020</aside></a>
+            <a href="/blog/posts/2020-01-01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B001/">机器学习基石-笔记01<aside class="dates">Jan 1 2020</aside></a>
         </li>
     
         <li>
