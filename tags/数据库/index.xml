@@ -13,10 +13,10 @@
     
     <item>
       <title>数据库内容复习07-MySql的行级锁共享锁与排它锁</title>
-      <link>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81-copy/</link>
+      <link>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81/</link>
       <pubDate>Fri, 10 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81-copy/</guid>
+      <guid>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81/</guid>
       <description>复习数据库方面的内容, 以下为笔记内容, 参考了: MySQL中的共享锁与排他锁 &amp;hellip; 共享锁(Share Lock) 共享锁又称读锁，是读取操作创建的锁。其他用户</description>
     </item>
     
