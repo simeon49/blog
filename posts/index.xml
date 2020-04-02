@@ -6,17 +6,26 @@
     <description>Recent content in Posts on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
-    <lastBuildDate>Fri, 10 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://simeon49.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>机器学习基石-笔记01</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B001/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B001/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; NTU林轩田的《机器学习基石》课程, 整个基石课程分成四个部分： When Can Machine Learn? Why Can Machine Learn? How Can Machine Learn? How Can Machine</description>
+    </item>
+    
+    <item>
       <title>数据库内容复习07-MySql的行级锁共享锁与排它锁</title>
-      <link>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81/</link>
+      <link>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81-copy/</link>
       <pubDate>Fri, 10 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81/</guid>
+      <guid>https://simeon49.github.io/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81-copy/</guid>
       <description>复习数据库方面的内容, 以下为笔记内容, 参考了: MySQL中的共享锁与排他锁 &amp;hellip; 共享锁(Share Lock) 共享锁又称读锁，是读取操作创建的锁。其他用户</description>
     </item>
     

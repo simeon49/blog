@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-Hans-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<meta name="author" content="Simeon">
+		<meta name="description" content="Simeon 个人微博">
+		<meta name="generator" content="Hugo 0.52" />
+		<title>机器学习基石-笔记01 &middot; Simeon&#39;s blog</title>
+		<link rel="shortcut icon" href="https://simeon49.github.io/blog/images/favicon.ico">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/style.css">
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/highlight.css">
+
+		
+		<link rel="stylesheet" href="https://simeon49.github.io/blog/css/font-awesome.min.css">
+		
+
+		
+
+		
+	</head>
+
+    <body>
+       <nav class="main-nav">
+	
+	
+		<a href='https://simeon49.github.io/blog/'> <span class="arrow">←</span>Home</a>
+	
+	<a href='https://simeon49.github.io/blog/posts'>Archive</a>
+	<a href='https://simeon49.github.io/blog/tags'>Tags</a>
+	<a href='https://simeon49.github.io/blog/categories'>Categories</a>
+	<a href='https://simeon49.github.io/blog/about'>About</a>
+
+	
+
+	
+</nav>
+
+
+        <section id="wrapper" class="post">
+            <article>
+                <header>
+                    <h1>
+                        机器学习基石-笔记01
+                    </h1>
+                    <h2 class="headline">
+                    Jan 1, 2020 00:00
+                    · 1419 words
+                    · 3 minute read
+                      <span class="tags">
+                      
+                      
+                          
+                              <a href="https://simeon49.github.io/blog/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>
+                          
+                              <a href="https://simeon49.github.io/blog/tags/ml">ML</a>
+                          
+                      
+                      
+                      </span>
+                    </h2>
+                </header>
+                
+                <section id="post-body">
+                    
+
+<p>NTU林轩田的《机器学习基石》课程笔记(转载) <br>
+&hellip;</p>
+
+<p>NTU林轩田的《机器学习基石》课程, 整个基石课程分成四个部分：</p>
+
+<ul>
+<li><p>When Can Machine Learn?</p></li>
+
+<li><p>Why Can Machine Learn?</p></li>
+
+<li><p>How Can Machine Learn?</p></li>
+
+<li><p>How Can Machine Learn Better?</p></li>
+</ul>
+
+<p>每个部分由四节课组成，总共有16节课。那么，从这篇开始，我们将连续对这门课做课程笔记，共16篇，希望能对正在看这们课的童鞋有所帮助。下面开始第一节课的笔记：The Learning Problem。</p>
+
+<h3 id="一-what-is-machine-learning"><strong>一、What is Machine Learning</strong></h3>
+
+<p>什么是“学习”？学习就是人类通过观察、积累经验，掌握某项技能或能力。就好像我们从小学习识别字母、认识汉字，就是学习的过程。而机器学习（Machine Learning），顾名思义，就是让机器（计算机）也能向人类一样，通过观察大量的数据和训练，发现事物规律，获得某种分析问题、解决问题的能力。</p>
+
+<p><img src="../../pic/ML/9dd2cad8a66f29e53a6318e40a7412ef.jpg" alt="这里写图片描述" /></p>
+
+<p>机器学习可以被定义为：Improving some performance measure with experence computed from data. 也就是机器从数据中总结经验，从数据中找出某种规律或者模型，并用它来解决实际问题。</p>
+
+<p><img src="../../pic/ML/6bfe4b629d4641ce715c2f2abf8a015d.jpg" alt="这里写图片描述" /></p>
+
+<p>什么情况下会使用机器学习来解决问题呢？其实，目前机器学习的应用非常广泛，基本上任何场合都能够看到它的身影。其应用场合大致可归纳为三个条件：</p>
+
+<ul>
+<li><p>事物本身存在某种潜在规律</p></li>
+
+<li><p>某些问题难以使用普通编程解决</p></li>
+
+<li><p>有大量的数据样本可供使用</p></li>
+</ul>
+
+<p><img src="../../pic/ML/a592a711c257203636aa7cd6b10efcd7.jpg" alt="这里写图片描述" /></p>
+
+<h3 id="二-applications-of-machine-learning"><strong>二、Applications of Machine Learning</strong></h3>
+
+<p>机器学习在我们的衣、食、住、行、教育、娱乐等各个方面都有着广泛的应用，我们的生活处处都离不开机器学习。比如，打开购物网站，网站就会给我们自动推荐我们可能会喜欢的商品；电影频道会根据用户的浏览记录和观影记录，向不同用户推荐他们可能喜欢的电影等等，到处都有机器学习的影子。</p>
+
+<h3 id="三-components-of-machine-learning"><strong>三、Components of Machine Learning</strong></h3>
+
+<p>本系列的课程对机器学习问题有一些基本的术语需要注意一下：</p>
+
+<ul>
+<li><p>输入x</p></li>
+
+<li><p>输出y</p></li>
+
+<li><p>目标函数f，即最接近实际样本分布的规律</p></li>
+
+<li><p>训练样本data</p></li>
+
+<li><p>假设hypothesis，一个机器学习模型对应了很多不同的hypothesis，通过演算法A，选择一个最佳的hypothesis对应的函数称为矩g，g能最好地表示事物的内在规律，也是我们最终想要得到的模型表达式。</p></li>
+</ul>
+
+<p><img src="../../pic/ML/44da41b76a6ba9a827af7d7f41236640.jpg" alt="这里写图片描述" /></p>
+
+<p>实际中，机器学习的流程图可以表示为：</p>
+
+<p><img src="../../pic/ML/c4fa6c9095756476fa7259076381f958.jpg" alt="这里写图片描述" /></p>
+
+<p>对于理想的目标函数f，我们是不知道的，我们手上拿到的是一些训练样本D，假设是监督式学习，其中有输入x，也有输出y。机器学习的过程，就是根据先验知识选择模型，该模型对应的hypothesis set（用H表示），H中包含了许多不同的hypothesis，通过演算法A，在训练样本D上进行训练，选择出一个最好的hypothes，对应的函数表达式g就是我们最终要求的。一般情况下，g能最接近目标函数f，这样，机器学习的整个流程就完成了。</p>
+
+<h3 id="四-machine-learning-and-other-fields"><strong>四、Machine Learning and Other Fields</strong></h3>
+
+<p>与机器学习相关的领域有：</p>
+
+<ul>
+<li><p>数据挖掘（Data Mining）</p></li>
+
+<li><p>人工智能（Artificial Intelligence）</p></li>
+
+<li><p>统计（Statistics）</p></li>
+</ul>
+
+<p>其实，机器学习与这三个领域是相通的，基本类似，但也不完全一样。机器学习是这三个领域中的有力工具，而同时，这三个领域也是机器学习可以广泛应用的领域，总得来说，他们之间没有十分明确的界线。</p>
+
+<h3 id="五-总结"><strong>五、总结</strong></h3>
+
+<p>本节课主要介绍了什么是机器学习，什么样的场合下可以使用机器学习解决问题，然后用流程图的形式展示了机器学习的整个过程，最后把机器学习和数据挖掘、人工智能、统计这三个领域做个比较。本节课的内容主要是概述性的东西，比较简单，所以笔记也相对比较简略。</p>
+
+<p>这里附上林轩田（Hsuan-Tien Lin）关于这门课的主页：
+<a href="http://www.csie.ntu.edu.tw/~htlin/">http://www.csie.ntu.edu.tw/~htlin/</a></p>
+
+<p><strong><em>注明：</em></strong></p>
+
+<p>文章中所有的图片均来自台湾大学林轩田《机器学习基石》课程。</p>
+
+                </section>
+            </article>
+
+            
+
+            
+                <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'simeon49';
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+        
+        var disquesLoaded = false;
+        dsq.onload = function () {
+            disquesLoaded = true;
+        };
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+        setTimeout(() => {
+            if (!disquesLoaded) {
+                alert('加载disques 失败!');
+            }
+        }, 3000);
+
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+
+            
+                <ul id="post-list" class="archive readmore">
+    <h3>Read more</h3>
+
+    
+    
+    
+        <li>
+            <a href="/blog/posts/2019-05-10-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A007-mysql%E7%9A%84%E8%A1%8C%E7%BA%A7%E9%94%81%E5%85%B1%E4%BA%AB%E9%94%81%E4%B8%8E%E6%8E%92%E5%AE%83%E9%94%81-copy/">数据库内容复习07-MySql的行级锁共享锁与排它锁<aside class="dates">May 10 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-04-12-web-component/">web-component<aside class="dates">Apr 12 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-11-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A006-mysql%E7%9A%84%E4%BC%98%E5%8C%96%E5%8E%9F%E7%90%86/">数据库内容复习06-MySql的优化原理<aside class="dates">Mar 11 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-06-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A005-mysql%E7%9A%84%E4%BA%8B%E5%8A%A1/">数据库内容复习05-MySql的事务<aside class="dates">Mar 6 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-05-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A004-mysql%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C/">数据库内容复习04-MySql的其它操作<aside class="dates">Mar 5 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-03-04-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A003-mysql%E7%9A%84%E6%9F%A5%E8%AF%A2/">数据库内容复习03-MySql的查询<aside class="dates">Mar 4 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-02-28-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A002-mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%BB%AC/">数据库内容复习02-MySql的索引们<aside class="dates">Feb 28 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-02-26-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%86%85%E5%AE%B9%E5%A4%8D%E4%B9%A001-%E6%A6%82%E8%BF%B0/">数据库内容复习01-概述<aside class="dates">Feb 26 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-02-12-%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E8%AF%81gplbsdmitmozillaapache%E5%92%8Clgpl%E7%9A%84%E5%8C%BA%E5%88%AB/">开源许可证GPL、BSD、MIT、Mozilla、Apache和LGPL的区别<aside class="dates">Feb 12 2019</aside></a>
+        </li>
+    
+        <li>
+            <a href="/blog/posts/2019-01-26-%E4%BC%98%E7%BE%8E%E4%BB%A3%E7%A0%81-%E5%8E%9F%E5%9E%8B/">优美代码-原型<aside class="dates">Jan 26 2019</aside></a>
+        </li>
+    
+</ul>
+
+            
+
+            <footer id="footer">
+    
+        <div id="social">
+
+	
+	
+    <a class="symbol" href="https://github.com/simeon49">
+        <i class="fa fa-github-square"></i>
+    </a>
+    
+
+
+</div>
+
+    
+    <p class="small">
+    
+       © Copyright 2020 <i class="fa fa-heart" aria-hidden="true"></i> Simeon
+    
+    </p>
+    
+</footer>
+
+        </section>
+
+        <script src="https://simeon49.github.io/blog/js/jquery-3.3.1.min.js"></script>
+<script src="https://simeon49.github.io/blog/js/main.js"></script>
+<script src="https://simeon49.github.io/blog/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+<script>
+var baiduAnalytics = '74fafdde017951e1df78c761e7c017bc';
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?" + baiduAnalytics;
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+    </body>
+</html>
