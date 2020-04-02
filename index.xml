@@ -6,10 +6,73 @@
     <description>Recent content on Simeon&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-Hans-CN</language>
-    <lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jan 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://simeon49.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>机器学习基石-笔记09</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-09-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B009/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-09-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B009/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; 9 &amp;ndash; Linear Regression 上节课，我们主要介绍了在有noise的情况下，VC Bound理论仍然是成立的。同时，</description>
+    </item>
+    
+    <item>
+      <title>机器学习基石-笔记08</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-08-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B008/</link>
+      <pubDate>Wed, 08 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-08-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B008/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; 8 &amp;ndash; Noise and Error 上一节课，我们主要介绍了VC Dimension的概念。如果Hypotheses se</description>
+    </item>
+    
+    <item>
+      <title>机器学习基石-笔记07</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-07-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B007/</link>
+      <pubDate>Tue, 07 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-07-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B007/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; 7 &amp;ndash; The VC Dimension 前几节课着重介绍了机器能够学习的条件并做了详细的推导和解释。机器能够学习必须满足两</description>
+    </item>
+    
+    <item>
+      <title>机器学习基石-笔记06</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B006/</link>
+      <pubDate>Mon, 06 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-06-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B006/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; 6 &amp;ndash; Theory of Generalization 上一节课，我们主要探讨了当M的数值大小对机器学习的影响。如果M很大，那么就不能保证</description>
+    </item>
+    
+    <item>
+      <title>机器学习基石-笔记05</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-05-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B005/</link>
+      <pubDate>Sun, 05 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-05-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B005/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; 5 &amp;ndash; Training versus Testing 上节课，我们主要介绍了机器学习的可行性。首先，由NFL定理可知，机器学习貌似是不可</description>
+    </item>
+    
+    <item>
+      <title>机器学习基石-笔记04</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B004/</link>
+      <pubDate>Sat, 04 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-04-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B004/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; 4 &amp;ndash; Feasibility of Learning 上节课，我们主要介绍了根据不同的设定，机器学习可以分为不同的类型。其中，监督式学习</description>
+    </item>
+    
+    <item>
+      <title>机器学习基石-笔记03</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B003/</link>
+      <pubDate>Fri, 03 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-03-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B003/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; 3 &amp;ndash; Types of Learning 上节课我们主要介绍了解决线性分类问题的一个简单的方法：PLA。PLA能够在平面中选</description>
+    </item>
     
     <item>
       <title>机器学习基石-笔记01</title>
@@ -17,6 +80,15 @@
       <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://simeon49.github.io/blog/posts/2020-01-01-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B001/</guid>
+      <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; NTU林轩田的《机器学习基石》课程, 整个基石课程分成四个部分： When Can Machine Learn? Why Can Machine Learn? How Can Machine Learn? How Can Machine</description>
+    </item>
+    
+    <item>
+      <title>机器学习基石-笔记01</title>
+      <link>https://simeon49.github.io/blog/posts/2020-01-02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B002/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://simeon49.github.io/blog/posts/2020-01-02-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%9F%BA%E7%9F%B3-%E7%AC%94%E8%AE%B002/</guid>
       <description>NTU林轩田的《机器学习基石》课程笔记(转载) &amp;hellip; NTU林轩田的《机器学习基石》课程, 整个基石课程分成四个部分： When Can Machine Learn? Why Can Machine Learn? How Can Machine Learn? How Can Machine</description>
     </item>
     
